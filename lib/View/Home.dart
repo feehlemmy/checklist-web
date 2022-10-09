@@ -170,7 +170,7 @@ class Home extends StatelessWidget {
               )),
             ),
             textAlign: TextAlign.center,
-            onChanged: (value) => HomeController.password = value,
+            onChanged: (value) => HomeController.to.password = value,
             onEditingComplete: () {
               HomeController.to.validateFields();
             },
@@ -224,7 +224,7 @@ class Home extends StatelessWidget {
           )),
         ),
         textAlign: TextAlign.center,
-        onChanged: (value) => HomeController.username = value,
+        onChanged: (value) => HomeController.to.username = value,
       ),
     ).marginOnly(top: 1.h);
   }

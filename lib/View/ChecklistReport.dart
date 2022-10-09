@@ -215,87 +215,262 @@ class ChecklistReport extends StatelessWidget {
                           ),
                         )).marginOnly(left: width * 0.02),
                     Container(
-                      width: small == true ? width * .1 : width * .1,
-                      height: height * .1,
-                      child: Container(
-                        height: height * .1,
-                        child: TextFormField(
-                          autofocus: false,
-                          style: GoogleFonts.montserrat(
-                              textStyle:
-                                  TextStyle(color: Colors.white, fontSize: 14)),
-                          decoration: InputDecoration(
-                            hintText: optionValue.value,
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: optionValue.value,
-                            labelStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                              fontSize: 14,
+                      width: small == true ? width * .17 : width * .12,
+                      height: height * .07,
+                      decoration: BoxDecoration(
+                          border: Border.all(
                               color: Colors.white,
-                            )),
-                            border: outlineInputBorder,
-                            enabledBorder: outlineInputBorder,
-                            focusedBorder: enableBorder,
-                            errorStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.red,
-                            )),
-                            hintStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            )),
-                          ),
-                          textAlign: TextAlign.center,
-                          onChanged: (value) => parameter.value = value,
-                        ),
+                              style: BorderStyle.solid,
+                              width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: DropdownButton(
+                        onChanged: (String? newValue) {
+                          optionValue.value = newValue!;
+                        },
+                        selectedItemBuilder: (BuildContext context) {
+                          return items.map<Widget>((String item) {
+                            return Container(
+                              alignment: Alignment.center,
+                              child: CommonWidgets.buildText(
+                                  item, 14, Colors.white, TextAlign.center),
+                            );
+                          }).toList();
+                        },
+                        items: items.map((String option) {
+                          return DropdownMenuItem(
+                            child: CommonWidgets.buildText(
+                                option, 14, Colors.white, TextAlign.center),
+                            value: option,
+                          );
+                        }).toList(),
+                        value: optionValue.value,
+                        dropdownColor: PersonalizedColors.skyBlue,
+                        isExpanded: true,
+                        isDense: false,
+                        underline: SizedBox(),
+                      ).marginOnly(
+                        left: 10,
+                        right: 10,
                       ),
-                    ).marginOnly(left: width * 0.02, top: height * 0.035),
+                    ).marginOnly(left: width * 0.02),
                     Container(
-                      width: small == true ? width * .15 : width * .08,
-                      height: height * .065,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: PersonalizedColors.lightGreen,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(60.0),
-                              )),
-                          onPressed: () async {
-                            Controller.to.offset.value = 0;
-                            Controller.to.cards2.value = [];
-                            Controller.to.visible.value = true;
-                            Controller.to.countSearch.value = 0;
-                            await Controller.to.searchResponseCheckList(
-                                Controller.to.productName.value!,
-                                optionValue.value!,
-                                parameter.value!,
-                                '1000000000',
-                                '0',
-                                statusValue.value!,
-                                productFilterName.value);
-
-                            if (Controller.to.ansewersListReactive.isEmpty) {
-                              Controller.to.visible.value = false;
-                              Controller.to.snackbar(
-                                  'Por favor verifique os parâmetros de busca',
-                                  'Não foi possível encontrar checklists',
-                                  PersonalizedColors.errorColor);
-                            } else {
-                              Controller.to.visible.value = false;
-                              Controller.to.cards2.value = buildCards(height,
-                                  width, small, Controller.to.cards2, context);
-                              Controller.to.countSearch.value =
-                                  Controller.to.ansewersListReactive.length;
-                            }
-                          },
-                          child: CommonWidgets.buildText(
-                              "Buscar", 14, Colors.white, TextAlign.center)),
-                    ).marginOnly(left: width * 0.01),
+                      width: width * .1,
+                      height: height * .07,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.white,
+                              style: BorderStyle.solid,
+                              width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: DropdownButton(
+                        onChanged: (String? newValue) {
+                          statusValue.value = newValue!;
+                        },
+                        selectedItemBuilder: (BuildContext context) {
+                          return status.map<Widget>((String status) {
+                            return Container(
+                              alignment: Alignment.center,
+                              child: CommonWidgets.buildText(statusValue.value,
+                                  14, Colors.white, TextAlign.center),
+                            );
+                          }).toList();
+                        },
+                        items: status.map((String option) {
+                          return DropdownMenuItem(
+                            child: CommonWidgets.buildText(
+                                option, 14, Colors.white, TextAlign.center),
+                            value: option,
+                          );
+                        }).toList(),
+                        value: statusValue.value,
+                        dropdownColor: PersonalizedColors.skyBlue,
+                        isExpanded: true,
+                        isDense: false,
+                        underline: SizedBox(),
+                      ).marginOnly(
+                        left: 10,
+                        right: 10,
+                      ),
+                    ).marginOnly(left: width * 0.02),
+                    optionValue.value != "Data"
+                        ? Container(
+                            width: small == true ? width * .1 : width * .1,
+                            height: height * .1,
+                            child: Container(
+                              height: height * .1,
+                              child: TextFormField(
+                                autofocus: false,
+                                style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 14)),
+                                decoration: InputDecoration(
+                                  hintText: optionValue.value,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: optionValue.value,
+                                  labelStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  )),
+                                  border: outlineInputBorder,
+                                  enabledBorder: outlineInputBorder,
+                                  focusedBorder: enableBorder,
+                                  errorStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red,
+                                  )),
+                                  hintStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  )),
+                                ),
+                                textAlign: TextAlign.center,
+                                onChanged: (value) => parameter.value = value,
+                              ),
+                            ),
+                          ).marginOnly(left: width * 0.02, top: height * 0.035)
+                        : Row(
+                            children: [
+                              Container(
+                                  width:
+                                      small == true ? width * .1 : width * .1,
+                                  height: height * .07,
+                                  child: DateTimePicker(
+                                      autovalidate: false,
+                                      type: DateTimePickerType.date,
+                                      decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: PersonalizedColors.blueGrey,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        hintStyle: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic)),
+                                        hintText: 'Data Inicial',
+                                        alignLabelWithHint: true,
+                                        isCollapsed: false,
+                                        icon: Icon(Icons.event,
+                                            color: Colors.white),
+                                      ),
+                                      dateMask: 'dd/MM/yyyy',
+                                      firstDate: DateTime(2021),
+                                      cursorRadius: Radius.circular(90),
+                                      lastDate: DateTime(2100),
+                                      style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      )),
+                                      textAlign: TextAlign.center,
+                                      icon: Icon(Icons.event,
+                                          color: Colors.white),
+                                      timeLabelText: "Hora",
+                                      locale: (Locale('pt', 'BR')),
+                                      onChanged: (val) {
+                                        Controller.to.initialDate =
+                                            DateTime.parse(val);
+                                      })).marginOnly(left: width * 0.02),
+                              Container(
+                                  width:
+                                      small == true ? width * .1 : width * .1,
+                                  height: height * .07,
+                                  child: DateTimePicker(
+                                      autovalidate: false,
+                                      type: DateTimePickerType.date,
+                                      decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: PersonalizedColors.blueGrey,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        hintStyle: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic)),
+                                        hintText: 'Data Final',
+                                        alignLabelWithHint: true,
+                                        isCollapsed: false,
+                                        icon: Icon(Icons.event,
+                                            color: Colors.white),
+                                      ),
+                                      dateMask: 'dd/MM/yyyy',
+                                      firstDate: DateTime(2000),
+                                      cursorRadius: Radius.circular(90),
+                                      lastDate: DateTime(2100),
+                                      style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      )),
+                                      textAlign: TextAlign.center,
+                                      icon: Icon(Icons.event,
+                                          color: Colors.white),
+                                      timeLabelText: "Hora",
+                                      locale: (Locale('pt', 'BR')),
+                                      onChanged: (val) {
+                                        Controller.to.endDate =
+                                            DateTime.parse(val);
+                                        Controller.to.endDate =
+                                            Controller.to.endDate!.add(Duration(
+                                                hours: 23, minutes: 59));
+                                      })).marginOnly(left: width * 0.02),
+                            ],
+                          ),
                   ],
                 ).marginOnly(
                     top: height * 0.05, left: width * 0.1, right: width * 0.1),
               ])),
+          Container(
+            width: small == true ? width * .15 : width * .08,
+            height: height * .065,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: PersonalizedColors.lightGreen,
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(60.0),
+                    )),
+                onPressed: () async {
+                  Controller.to.offset.value = 0;
+                  Controller.to.cards2.value = [];
+                  Controller.to.visible.value = true;
+                  Controller.to.countSearch.value = 0;
+                  await Controller.to.searchResponseCheckList(
+                      Controller.to.productName.value!,
+                      optionValue.value!,
+                      parameter.value!,
+                      '1000000000',
+                      '0',
+                      statusValue.value!,
+                      productFilterName.value);
+
+                  if (Controller.to.ansewersListReactive.isEmpty) {
+                    Controller.to.visible.value = false;
+                    Controller.to.snackbar(
+                        'Por favor verifique os parâmetros de busca',
+                        'Não foi possível encontrar checklists',
+                        PersonalizedColors.errorColor);
+                  } else {
+                    Controller.to.visible.value = false;
+                    Controller.to.cards2.value = buildCards(
+                        height, width, small, Controller.to.cards2, context);
+                    Controller.to.countSearch.value =
+                        Controller.to.ansewersListReactive.length;
+                  }
+                },
+                child: CommonWidgets.buildText(
+                    "Buscar", 14, Colors.white, TextAlign.center)),
+          ).marginOnly(left: width * 0.01),
           Obx(() => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -356,8 +531,7 @@ class ChecklistReport extends StatelessWidget {
       final checklist = checklistSkeletonAux.obs;
       Color color = checklist.value!.statusOfCheckList! == "Aprovado"
           ? PersonalizedColors.darkGreen
-          : checklist.value!.statusOfCheckList! == "Retrabalhado" ||
-                  checklist.value!.statusOfCheckList! == "Retrabalho"
+          : checklist.value!.statusOfCheckList!.contains('Ret')
               ? PersonalizedColors.warningColor
               : PersonalizedColors.errorColor;
       cards.add(
@@ -392,6 +566,13 @@ class ChecklistReport extends StatelessWidget {
           Container(
             child: CommonWidgets.buildText(checklist.value!.statusOfCheckList!,
                 14, color, TextAlign.center),
+          ).marginAll(2),
+          Container(
+            child: CommonWidgets.buildText(
+                CommonWidgets.getFormatter().format(checklist.value!.date!),
+                14,
+                Colors.white,
+                TextAlign.center),
           ).marginAll(2),
         ]),
       );

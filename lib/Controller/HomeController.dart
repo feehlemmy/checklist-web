@@ -9,13 +9,12 @@ import '../ModelReactive/ItemDrawer.dart';
 import '../View/Dashboard.dart';
 
 class HomeController extends GetxController {
-  static String username = '';
-  static String password = '';
   late String token;
 
   RxBool hiddenPassword = true.obs;
   UserRepository userRepository = UserRepository();
-
+  String username = '';
+  String password = '';
   static HomeController get to => Get.find();
 
   Image image1 = Image.asset(
@@ -139,13 +138,7 @@ filterTypeOfUser(String? sector) {
       ItemDrawer(
           name: 'CheckLists Respondidos', iconData: Icons.list, index: 0),
       ItemDrawer(
-          name: 'CheckLists Reprovados Produção',
-          iconData: Icons.list,
-          index: 12),
-      ItemDrawer(
-          name: 'CheckLists Reprovados Assistência Técnica',
-          iconData: Icons.list,
-          index: 12),
+          name: 'CheckLists Reprovados', iconData: Icons.list, index: 12),
       ItemDrawer(name: 'Trocar Senha', iconData: Icons.change_circle, index: 8),
     ];
   } else if (sector == Constants.controleDeQualidade) {

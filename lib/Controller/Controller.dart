@@ -41,7 +41,9 @@ class Controller extends GetxController {
     await getUser();
     await getUsers();
     await getProducts();
-    await getChecklistSkeleton();
+    if (user.sector!.value == Constants.administrativo) {
+      await getChecklistSkeleton();
+    }
     await getAllCause();
 
     super.onInit();
@@ -278,7 +280,7 @@ class Controller extends GetxController {
       productId = -1;
     } else {
       for (ProductEntityReactive item in products) {
-        String name = item.name!.value!;
+        String name = item.name!.value;
         if (name == productName) {
           productId = item.id!;
           break;
@@ -286,41 +288,23 @@ class Controller extends GetxController {
       }
     }
     List<CheckListAnswerReactive> auxList = List.empty(growable: true);
-    String status = "Reprovado";
     if (searchType == 'Data') {
       sizeOfResponse.value = await answerRepository.countResponseData(
-          productId, initialDate, endDate, status);
+          productId, initialDate, endDate, "Reprovado");
 
-      auxList = await answerRepository.findByDate(
-          productId, initialDate, endDate, limit, offset, status, 'Todos',
+      auxList = await answerRepository.findByDateReproved(
+          productId, initialDate, endDate, limit, offset, 'Todos',
           reprovedOrAll: "onlyReproved");
     } else {
       sizeOfResponse.value = await answerRepository.countResponse(
-          productId, searchType, parameter, status);
+          productId, searchType, parameter, "Reprovado");
 
-      auxList = await answerRepository.findByPaginationBatchOrSerialNumer(
-          productId, searchType, parameter, limit!, offset!, status, "Todos",
-          reprovedOrAll: "onlyReproved");
+      auxList =
+          await answerRepository.findByPaginationBatchOrSerialNumerReproved(
+              productId, searchType, parameter, limit!, offset!, "Todos",
+              reprovedOrAll: "onlyReproved");
     }
-    for (var item in auxList) {
-      if (item.statusOfCheckList!.trim() == 'Reprovado') {
-        if (item.sector!.value.trim() == user.sector!.value.trim()) {
-          if (item.redirectTo != null) {
-            if (item.redirectTo!.trim() == user.sector!.value.trim()) {
-              ansewersListReactive.add(item);
-            }
-          } else {
-            ansewersListReactive.add(item);
-          }
-        } else {
-          if (item.redirectTo != null) {
-            if (item.redirectTo!.trim() == user.sector!.value.trim()) {
-              ansewersListReactive.add(item);
-            }
-          }
-        }
-      }
-    }
+    ansewersListReactive = auxList;
   }
 
   getAllCause() async {
@@ -394,7 +378,7 @@ class Controller extends GetxController {
   Future<void> getChecklistSkeleton() async {
     checklistSkeletonList =
         await checklistSketonRepository.getAllChecklistSkeleton(
-            UserEntityReactive(sector: "Constants.administrativo".obs));
+            UserEntityReactive(sector: Constants.administrativo.obs));
   }
 
   List<CheckListSkeletonReactive> getChecklistSkeletonList() {
@@ -513,6 +497,7 @@ class Controller extends GetxController {
   logout() async {
     final box = GetStorage();
     await box.erase();
+    Get.deleteAll();
     Get.offAll(Home());
   }
 
@@ -638,6 +623,48 @@ class Controller extends GetxController {
     }
   }
 
+  searchResponseCheckListReport(
+      String productName,
+      String searchType,
+      String parameter,
+      String? limit,
+      String? offset,
+      String status,
+      String productFilterName) async {
+    int? productId;
+    ansewersListReactive = RxList.empty(growable: true);
+    if (productName.trim().toLowerCase() == 'Todos'.trim().toLowerCase()) {
+      productId = -1;
+    } else {
+      for (ProductEntityReactive item in products) {
+        String name = item.name!.value!;
+        if (name == productName) {
+          productId = item.id!;
+          break;
+        }
+      }
+    }
+    List<CheckListAnswerReactive> auxList = [];
+    if (searchType == 'Data') {
+      ansewersListReactive = await answerRepository.findByDateReport(productId,
+          initialDate, endDate, limit, offset, status, productFilterName);
+      sizeOfResponse2.value = ansewersListReactive.length;
+    } else {
+      ansewersListReactive =
+          await answerRepository.findByPaginationBatchOrSerialNumerReport(
+              productId,
+              searchType,
+              parameter,
+              limit!,
+              offset!,
+              status,
+              productFilterName);
+      sizeOfResponse2.value = ansewersListReactive.length;
+    }
+
+    sizeOfResponse.value = ansewersListReactive.length;
+  }
+
   buildProductNameList() {
     getProducts();
 
@@ -755,35 +782,17 @@ class Controller extends GetxController {
   getChecklistFirstTime() async {
     var auxList = await checklistSketonRepository.getAllChecklistSkeleton(user);
     List<CheckListSkeletonReactive> aux2 = List.empty(growable: true);
-    print('here');
     for (var item in auxList) {
       if (item.status!.value!.trim() == 'Active') {
         aux2.add(item);
       }
     }
-    print('here');
 
     if (aux2.length <= checklistSkeletonList.length) {
-      if (user.sector!.value != Constants.controleDeQualidade) {
-        checklistSkeletonList.removeWhere(
-            (element) => element.sector!.value != user.sector!.value);
-      } else {
-        checklistSkeletonList.removeWhere((element) =>
-            element.sector!.value != user.sector!.value &&
-            element.sector!.value != Constants.inspecaoVisual);
-      }
       return checklistSkeletonList;
     } else {
       checklistSkeletonList = [];
       checklistSkeletonList = aux2;
-      if (user.sector!.value != Constants.controleDeQualidade) {
-        checklistSkeletonList.removeWhere(
-            (element) => element.sector!.value != user.sector!.value);
-      } else {
-        checklistSkeletonList.removeWhere((element) =>
-            element.sector!.value != user.sector!.value &&
-            element.sector!.value != Constants.inspecaoVisual);
-      }
       return checklistSkeletonList;
     }
   }

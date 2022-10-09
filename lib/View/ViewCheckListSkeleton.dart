@@ -123,24 +123,8 @@ class ViewCheckListSkeleton extends StatelessWidget {
           cheklistSkeletonFilteredList.add(checklistSkeleton);
         }
       }
-      if (Controller.to.user.sector!.value != Constants.controleDeQualidade) {
-        cheklistSkeletonFilteredList.removeWhere((element) =>
-            element.sector!.value != Controller.to.user.sector!.value);
-      } else {
-        checklistSkeletonList.removeWhere((element) =>
-            element.sector!.value != Controller.to.user.sector!.value &&
-            element.sector!.value != Constants.inspecaoVisual);
-      }
     } else {
       cheklistSkeletonFilteredList = checklistSkeletonList;
-      if (Controller.to.user.sector!.value != Constants.controleDeQualidade) {
-        cheklistSkeletonFilteredList.removeWhere((element) =>
-            element.sector!.value != Controller.to.user.sector!.value);
-      } else {
-        checklistSkeletonList.removeWhere((element) =>
-            element.sector!.value != Controller.to.user.sector!.value &&
-            element.sector!.value != Constants.inspecaoVisual);
-      }
     }
 
     for (CheckListSkeletonReactive checklistSkeletonAux

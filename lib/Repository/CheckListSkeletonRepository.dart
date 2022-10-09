@@ -67,7 +67,7 @@ class ChecklistSketonRepository {
   }
 
   Future<List<CheckListSkeletonReactive>> getAllChecklistSkeleton(
-      UserEntityReactive? user) async {
+      UserEntityReactive user) async {
     Dio dio = Dio();
     final box = GetStorage();
 
@@ -77,6 +77,9 @@ class ChecklistSketonRepository {
 
       var response = await dio.get(
         Constants.baseURL + "checklistSkeleton/getAll",
+        queryParameters: {
+          'sector': user.sector!.value,
+        },
       );
 
       if (response.statusCode == 200) {

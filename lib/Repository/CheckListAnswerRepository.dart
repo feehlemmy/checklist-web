@@ -350,6 +350,278 @@ class CheckListAnswerRepository {
     }
   }
 
+  Future<List<CheckListAnswerReactive>> findByDateReport(
+      int? productId,
+      DateTime? initialDate,
+      DateTime? endDate,
+      String? limit,
+      String? offset,
+      String? status,
+      String productFilterName,
+      {String reprovedOrAll = "all"}) async {
+    Dio dio = Dio();
+    final box = GetStorage();
+
+    if (productId == null) {
+      productId = -1;
+    }
+    try {
+      String value = (box.read('token'))!;
+      dio.options.headers["authorization"] = "Bearer " + value;
+      dio.options.headers["reprovedOrAll"] = reprovedOrAll;
+
+      String url = 'checklistAnswer/findByDateReport';
+      var response = await dio.post(
+        Constants.baseURL + url,
+        data: {
+          'initialDate': initialDate.toString(),
+          'endDate': endDate.toString(),
+          'productId': productId,
+          'limit': limit,
+          'offset': offset,
+          'status': status,
+          'sector': Controller.to.user.sector!.value,
+          'productFilterName': productFilterName
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<CheckListAnswerReactive> checklistReactiveList = [];
+        List<CheckListAnswerRepositoryEntity> checklistEntityRepositoryList =
+            [];
+        List<QuestionAnswerReactive> questionList = [];
+        List<InterestedPartiesEmailAnswerReactiveEntity> partyList = [];
+
+        checklistEntityRepositoryList = (response.data as List)
+            .map((x) => CheckListAnswerRepositoryEntity.fromMap(x))
+            .toList();
+
+        for (int i = 0; i < checklistEntityRepositoryList.length; i++) {
+          CheckListAnswerRepositoryEntity checklistRepositoryEntity =
+              checklistEntityRepositoryList[i];
+          CheckListAnswerReactive checkListReactiveEntity =
+              CheckListAnswerReactive();
+          for (var questionRepositoryEntity
+              in checklistRepositoryEntity.questionList!) {
+            QuestionAnswerReactive question = new QuestionAnswerReactive(
+                category: questionRepositoryEntity.category!.obs,
+                description: questionRepositoryEntity.description!.obs,
+                tooltip: questionRepositoryEntity.tooltip != null
+                    ? questionRepositoryEntity.tooltip!.obs
+                    : "".obs,
+                position: questionRepositoryEntity.position != null
+                    ? questionRepositoryEntity.position!.obs
+                    : null,
+                id: questionRepositoryEntity.id,
+                approved: questionRepositoryEntity.approved!.obs,
+                disapproved: questionRepositoryEntity.disapproved!.obs);
+
+            questionList.add(question);
+          }
+          for (var partyRepositoryEntity
+              in checklistRepositoryEntity.interestedPartiesEmailList!) {
+            InterestedPartiesEmailAnswerReactiveEntity party =
+                new InterestedPartiesEmailAnswerReactiveEntity(
+              email: partyRepositoryEntity.email!.obs,
+              id: partyRepositoryEntity.id,
+            );
+            partyList.add(party);
+          }
+
+          checkListReactiveEntity.id = checklistRepositoryEntity.id;
+          checkListReactiveEntity.title = checklistRepositoryEntity.title!.obs;
+          checkListReactiveEntity.sector =
+              checklistRepositoryEntity.sector!.obs;
+          checkListReactiveEntity.productId =
+              checklistRepositoryEntity.productId!.obs;
+          checkListReactiveEntity.questions = questionList;
+          checkListReactiveEntity.interestedPartiesEmailList = partyList;
+          checkListReactiveEntity.batch = checklistRepositoryEntity.batch!.obs;
+          checkListReactiveEntity.cause = checklistRepositoryEntity.cause;
+          checkListReactiveEntity.causeDescription =
+              checklistRepositoryEntity.causeDescription;
+
+          checkListReactiveEntity.date = checklistRepositoryEntity.date;
+          checkListReactiveEntity.dateAssistance =
+              checklistRepositoryEntity.dateAssistance;
+          checkListReactiveEntity.redirectTo =
+              checklistRepositoryEntity.redirectTo;
+          checkListReactiveEntity.productVersion =
+              checklistRepositoryEntity.productVersion!.obs;
+          checkListReactiveEntity.serieNumber =
+              checklistRepositoryEntity.serieNumber!.obs;
+          checkListReactiveEntity.statusOfCheckList =
+              checklistRepositoryEntity.statusOfCheckList;
+          checkListReactiveEntity.statusOfProduct =
+              checklistRepositoryEntity.statusOfProduct;
+          checkListReactiveEntity.nameOfUser =
+              checklistRepositoryEntity.nameOfUser!.obs;
+          checkListReactiveEntity.nameOfUserAssistance =
+              checklistRepositoryEntity.nameOfUserAssistance;
+          checkListReactiveEntity.observation =
+              checklistRepositoryEntity.observation != null
+                  ? checklistRepositoryEntity.observation!.obs
+                  : ''.obs;
+          checkListReactiveEntity.origin =
+              checklistRepositoryEntity.origin != null
+                  ? checklistRepositoryEntity.origin!.obs
+                  : ''.obs;
+
+          checkListReactiveEntity.testEnvironment =
+              checklistRepositoryEntity.testEnvironment != null
+                  ? checklistRepositoryEntity.testEnvironment!.obs
+                  : ''.obs;
+
+          checklistReactiveList.add(checkListReactiveEntity);
+          partyList = [];
+          questionList = [];
+        }
+
+        return checklistReactiveList;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      e.printError();
+      return [];
+    }
+  }
+
+  Future<List<CheckListAnswerReactive>> findByDateReproved(
+      int? productId,
+      DateTime? initialDate,
+      DateTime? endDate,
+      String? limit,
+      String? offset,
+      String productFilterName,
+      {String reprovedOrAll = "all"}) async {
+    Dio dio = Dio();
+    final box = GetStorage();
+
+    if (productId == null) {
+      productId = -1;
+    }
+    try {
+      String value = (box.read('token'))!;
+      dio.options.headers["authorization"] = "Bearer " + value;
+      dio.options.headers["reprovedOrAll"] = reprovedOrAll;
+
+      String url = 'checklistAnswer/findByDateReproved';
+      var response = await dio.post(
+        Constants.baseURL + url,
+        data: {
+          'initialDate': initialDate.toString(),
+          'endDate': endDate.toString(),
+          'productId': productId,
+          'limit': limit,
+          'offset': offset,
+          'sector': Controller.to.user.sector!.value,
+          'productFilterName': productFilterName
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<CheckListAnswerReactive> checklistReactiveList = [];
+        List<CheckListAnswerRepositoryEntity> checklistEntityRepositoryList =
+            [];
+        List<QuestionAnswerReactive> questionList = [];
+        List<InterestedPartiesEmailAnswerReactiveEntity> partyList = [];
+
+        checklistEntityRepositoryList = (response.data as List)
+            .map((x) => CheckListAnswerRepositoryEntity.fromMap(x))
+            .toList();
+
+        for (int i = 0; i < checklistEntityRepositoryList.length; i++) {
+          CheckListAnswerRepositoryEntity checklistRepositoryEntity =
+              checklistEntityRepositoryList[i];
+          CheckListAnswerReactive checkListReactiveEntity =
+              CheckListAnswerReactive();
+          for (var questionRepositoryEntity
+              in checklistRepositoryEntity.questionList!) {
+            QuestionAnswerReactive question = new QuestionAnswerReactive(
+                category: questionRepositoryEntity.category!.obs,
+                description: questionRepositoryEntity.description!.obs,
+                tooltip: questionRepositoryEntity.tooltip != null
+                    ? questionRepositoryEntity.tooltip!.obs
+                    : "".obs,
+                position: questionRepositoryEntity.position != null
+                    ? questionRepositoryEntity.position!.obs
+                    : null,
+                id: questionRepositoryEntity.id,
+                approved: questionRepositoryEntity.approved!.obs,
+                disapproved: questionRepositoryEntity.disapproved!.obs);
+
+            questionList.add(question);
+          }
+          for (var partyRepositoryEntity
+              in checklistRepositoryEntity.interestedPartiesEmailList!) {
+            InterestedPartiesEmailAnswerReactiveEntity party =
+                new InterestedPartiesEmailAnswerReactiveEntity(
+              email: partyRepositoryEntity.email!.obs,
+              id: partyRepositoryEntity.id,
+            );
+            partyList.add(party);
+          }
+
+          checkListReactiveEntity.id = checklistRepositoryEntity.id;
+          checkListReactiveEntity.title = checklistRepositoryEntity.title!.obs;
+          checkListReactiveEntity.sector =
+              checklistRepositoryEntity.sector!.obs;
+          checkListReactiveEntity.productId =
+              checklistRepositoryEntity.productId!.obs;
+          checkListReactiveEntity.questions = questionList;
+          checkListReactiveEntity.interestedPartiesEmailList = partyList;
+          checkListReactiveEntity.batch = checklistRepositoryEntity.batch!.obs;
+          checkListReactiveEntity.cause = checklistRepositoryEntity.cause;
+          checkListReactiveEntity.causeDescription =
+              checklistRepositoryEntity.causeDescription;
+
+          checkListReactiveEntity.date = checklistRepositoryEntity.date;
+          checkListReactiveEntity.dateAssistance =
+              checklistRepositoryEntity.dateAssistance;
+          checkListReactiveEntity.redirectTo =
+              checklistRepositoryEntity.redirectTo;
+          checkListReactiveEntity.productVersion =
+              checklistRepositoryEntity.productVersion!.obs;
+          checkListReactiveEntity.serieNumber =
+              checklistRepositoryEntity.serieNumber!.obs;
+          checkListReactiveEntity.statusOfCheckList =
+              checklistRepositoryEntity.statusOfCheckList;
+          checkListReactiveEntity.statusOfProduct =
+              checklistRepositoryEntity.statusOfProduct;
+          checkListReactiveEntity.nameOfUser =
+              checklistRepositoryEntity.nameOfUser!.obs;
+          checkListReactiveEntity.nameOfUserAssistance =
+              checklistRepositoryEntity.nameOfUserAssistance;
+          checkListReactiveEntity.observation =
+              checklistRepositoryEntity.observation != null
+                  ? checklistRepositoryEntity.observation!.obs
+                  : ''.obs;
+          checkListReactiveEntity.origin =
+              checklistRepositoryEntity.origin != null
+                  ? checklistRepositoryEntity.origin!.obs
+                  : ''.obs;
+
+          checkListReactiveEntity.testEnvironment =
+              checklistRepositoryEntity.testEnvironment != null
+                  ? checklistRepositoryEntity.testEnvironment!.obs
+                  : ''.obs;
+
+          checklistReactiveList.add(checkListReactiveEntity);
+          partyList = [];
+          questionList = [];
+        }
+
+        return checklistReactiveList;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      e.printError();
+      return [];
+    }
+  }
+
   findForIndicators(String month, String year) async {
     List<DateTime> dateList = buildDate(month, year);
     return findByDate(
@@ -579,6 +851,261 @@ class CheckListAnswerRepository {
           'offset': offset,
           'status': status,
           'sector': Controller.to.user.sector!.value,
+          'productFilterName': productFilterName
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<CheckListAnswerReactive> checklistReactiveList = [];
+        List<CheckListAnswerRepositoryEntity> checklistEntityRepositoryList =
+            [];
+        List<QuestionAnswerReactive> questionList = [];
+        List<InterestedPartiesEmailAnswerReactiveEntity> partyList = [];
+
+        checklistEntityRepositoryList = (response.data as List)
+            .map((x) => CheckListAnswerRepositoryEntity.fromMap(x))
+            .toList();
+
+        for (int i = 0; i < checklistEntityRepositoryList.length; i++) {
+          CheckListAnswerRepositoryEntity checklistRepositoryEntity =
+              checklistEntityRepositoryList[i];
+          CheckListAnswerReactive checkListReactiveEntity =
+              CheckListAnswerReactive();
+          for (var questionRepositoryEntity
+              in checklistRepositoryEntity.questionList!) {
+            QuestionAnswerReactive question = new QuestionAnswerReactive(
+                category: questionRepositoryEntity.category!.obs,
+                description: questionRepositoryEntity.description!.obs,
+                tooltip: questionRepositoryEntity.tooltip != null
+                    ? questionRepositoryEntity.tooltip!.obs
+                    : "".obs,
+                position: questionRepositoryEntity.position != null
+                    ? questionRepositoryEntity.position!.obs
+                    : null,
+                id: questionRepositoryEntity.id,
+                approved: questionRepositoryEntity.approved!.obs,
+                disapproved: questionRepositoryEntity.disapproved!.obs);
+
+            questionList.add(question);
+          }
+          for (var partyRepositoryEntity
+              in checklistRepositoryEntity.interestedPartiesEmailList!) {
+            InterestedPartiesEmailAnswerReactiveEntity party =
+                new InterestedPartiesEmailAnswerReactiveEntity(
+              email: partyRepositoryEntity.email!.obs,
+              id: partyRepositoryEntity.id,
+            );
+            partyList.add(party);
+          }
+
+          checkListReactiveEntity.id = checklistRepositoryEntity.id;
+          checkListReactiveEntity.title = checklistRepositoryEntity.title!.obs;
+          checkListReactiveEntity.sector =
+              checklistRepositoryEntity.sector!.obs;
+          checkListReactiveEntity.productId =
+              checklistRepositoryEntity.productId!.obs;
+          checkListReactiveEntity.questions = questionList;
+          checkListReactiveEntity.interestedPartiesEmailList = partyList;
+          checkListReactiveEntity.batch = checklistRepositoryEntity.batch!.obs;
+          checkListReactiveEntity.cause = checklistRepositoryEntity.cause;
+          checkListReactiveEntity.causeDescription =
+              checklistRepositoryEntity.causeDescription;
+
+          checkListReactiveEntity.date = checklistRepositoryEntity.date;
+          checkListReactiveEntity.dateAssistance =
+              checklistRepositoryEntity.dateAssistance;
+          checkListReactiveEntity.redirectTo =
+              checklistRepositoryEntity.redirectTo;
+          checkListReactiveEntity.productVersion =
+              checklistRepositoryEntity.productVersion!.obs;
+          checkListReactiveEntity.serieNumber =
+              checklistRepositoryEntity.serieNumber!.obs;
+          checkListReactiveEntity.statusOfCheckList =
+              checklistRepositoryEntity.statusOfCheckList;
+          checkListReactiveEntity.statusOfProduct =
+              checklistRepositoryEntity.statusOfProduct;
+          checkListReactiveEntity.nameOfUser =
+              checklistRepositoryEntity.nameOfUser!.obs;
+          checkListReactiveEntity.nameOfUserAssistance =
+              checklistRepositoryEntity.nameOfUserAssistance;
+          checkListReactiveEntity.observation =
+              checklistRepositoryEntity.observation != null
+                  ? checklistRepositoryEntity.observation!.obs
+                  : ''.obs;
+          checkListReactiveEntity.origin =
+              checklistRepositoryEntity.origin != null
+                  ? checklistRepositoryEntity.origin!.obs
+                  : ''.obs;
+          checkListReactiveEntity.testEnvironment =
+              checklistRepositoryEntity.testEnvironment != null
+                  ? checklistRepositoryEntity.testEnvironment!.obs
+                  : ''.obs;
+          checklistReactiveList.add(checkListReactiveEntity);
+          partyList = [];
+          questionList = [];
+        }
+
+        return checklistReactiveList;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      e.printError();
+      return [];
+    }
+  }
+
+  findByPaginationBatchOrSerialNumerReproved(int? productId, String searchType,
+      String parameter, String limit, String offset, String productFilterName,
+      {String reprovedOrAll = 'all'}) async {
+    Dio dio = Dio();
+    final box = GetStorage();
+
+    try {
+      String value = (box.read('token'))!;
+      dio.options.headers["authorization"] = "Bearer " + value;
+      dio.options.headers["reprovedOrAll"] = reprovedOrAll;
+
+      var response = await dio.get(
+        Constants.baseURL + "checklistAnswer/paginationFindReproved",
+        queryParameters: {
+          'findBy': searchType,
+          'value': parameter,
+          'productId': productId,
+          'limit': limit,
+          'offset': offset,
+          'sector': Controller.to.user.sector!.value,
+          'productFilterName': productFilterName
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<CheckListAnswerReactive> checklistReactiveList = [];
+        List<CheckListAnswerRepositoryEntity> checklistEntityRepositoryList =
+            [];
+        List<QuestionAnswerReactive> questionList = [];
+        List<InterestedPartiesEmailAnswerReactiveEntity> partyList = [];
+
+        checklistEntityRepositoryList = (response.data as List)
+            .map((x) => CheckListAnswerRepositoryEntity.fromMap(x))
+            .toList();
+
+        for (int i = 0; i < checklistEntityRepositoryList.length; i++) {
+          CheckListAnswerRepositoryEntity checklistRepositoryEntity =
+              checklistEntityRepositoryList[i];
+          CheckListAnswerReactive checkListReactiveEntity =
+              CheckListAnswerReactive();
+          for (var questionRepositoryEntity
+              in checklistRepositoryEntity.questionList!) {
+            QuestionAnswerReactive question = new QuestionAnswerReactive(
+                category: questionRepositoryEntity.category!.obs,
+                description: questionRepositoryEntity.description!.obs,
+                tooltip: questionRepositoryEntity.tooltip != null
+                    ? questionRepositoryEntity.tooltip!.obs
+                    : "".obs,
+                position: questionRepositoryEntity.position != null
+                    ? questionRepositoryEntity.position!.obs
+                    : null,
+                id: questionRepositoryEntity.id,
+                approved: questionRepositoryEntity.approved!.obs,
+                disapproved: questionRepositoryEntity.disapproved!.obs);
+
+            questionList.add(question);
+          }
+          for (var partyRepositoryEntity
+              in checklistRepositoryEntity.interestedPartiesEmailList!) {
+            InterestedPartiesEmailAnswerReactiveEntity party =
+                new InterestedPartiesEmailAnswerReactiveEntity(
+              email: partyRepositoryEntity.email!.obs,
+              id: partyRepositoryEntity.id,
+            );
+            partyList.add(party);
+          }
+
+          checkListReactiveEntity.id = checklistRepositoryEntity.id;
+          checkListReactiveEntity.title = checklistRepositoryEntity.title!.obs;
+          checkListReactiveEntity.sector =
+              checklistRepositoryEntity.sector!.obs;
+          checkListReactiveEntity.productId =
+              checklistRepositoryEntity.productId!.obs;
+          checkListReactiveEntity.questions = questionList;
+          checkListReactiveEntity.interestedPartiesEmailList = partyList;
+          checkListReactiveEntity.batch = checklistRepositoryEntity.batch!.obs;
+          checkListReactiveEntity.cause = checklistRepositoryEntity.cause;
+          checkListReactiveEntity.causeDescription =
+              checklistRepositoryEntity.causeDescription;
+
+          checkListReactiveEntity.date = checklistRepositoryEntity.date;
+          checkListReactiveEntity.dateAssistance =
+              checklistRepositoryEntity.dateAssistance;
+          checkListReactiveEntity.redirectTo =
+              checklistRepositoryEntity.redirectTo;
+          checkListReactiveEntity.productVersion =
+              checklistRepositoryEntity.productVersion!.obs;
+          checkListReactiveEntity.serieNumber =
+              checklistRepositoryEntity.serieNumber!.obs;
+          checkListReactiveEntity.statusOfCheckList =
+              checklistRepositoryEntity.statusOfCheckList;
+          checkListReactiveEntity.statusOfProduct =
+              checklistRepositoryEntity.statusOfProduct;
+          checkListReactiveEntity.nameOfUser =
+              checklistRepositoryEntity.nameOfUser!.obs;
+          checkListReactiveEntity.nameOfUserAssistance =
+              checklistRepositoryEntity.nameOfUserAssistance;
+          checkListReactiveEntity.observation =
+              checklistRepositoryEntity.observation != null
+                  ? checklistRepositoryEntity.observation!.obs
+                  : ''.obs;
+          checkListReactiveEntity.origin =
+              checklistRepositoryEntity.origin != null
+                  ? checklistRepositoryEntity.origin!.obs
+                  : ''.obs;
+          checkListReactiveEntity.testEnvironment =
+              checklistRepositoryEntity.testEnvironment != null
+                  ? checklistRepositoryEntity.testEnvironment!.obs
+                  : ''.obs;
+          checklistReactiveList.add(checkListReactiveEntity);
+          partyList = [];
+          questionList = [];
+        }
+
+        return checklistReactiveList;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      e.printError();
+      return [];
+    }
+  }
+
+  findByPaginationBatchOrSerialNumerReport(
+      int? productId,
+      String searchType,
+      String parameter,
+      String limit,
+      String offset,
+      String status,
+      String productFilterName,
+      {String reprovedOrAll = 'all'}) async {
+    Dio dio = Dio();
+    final box = GetStorage();
+
+    try {
+      String value = (box.read('token'))!;
+      dio.options.headers["authorization"] = "Bearer " + value;
+      dio.options.headers["reprovedOrAll"] = reprovedOrAll;
+
+      var response = await dio.get(
+        Constants.baseURL + "checklistAnswer/paginationFindReport",
+        queryParameters: {
+          'findBy': searchType,
+          'value': parameter,
+          'productId': productId,
+          'limit': limit,
+          'offset': offset,
+          'sector': Controller.to.user.sector!.value,
+          'status': status,
           'productFilterName': productFilterName
         },
       );

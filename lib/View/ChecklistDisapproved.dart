@@ -375,7 +375,7 @@ class ChecklistDisapproved extends StatelessWidget {
                           },
                         )).marginOnly(right: width * 0.01)
                       : Container(),
-                  Controller.to.offset.value <
+                  Controller.to.offset.value <=
                           Controller.to.sizeOfResponse.value
                       ? Container(
                           child: ElevatedButton(

@@ -581,8 +581,7 @@ class ChecklistAnswered extends StatelessWidget {
       final checklist = checklistSkeletonAux.obs;
       Color color = checklist.value!.statusOfCheckList! == "Aprovado"
           ? PersonalizedColors.darkGreen
-          : checklist.value!.statusOfCheckList! == "Retrabalhado" ||
-                  checklist.value!.statusOfCheckList! == "Retrabalho"
+          : checklist.value!.statusOfCheckList!.contains("Retrab")
               ? PersonalizedColors.warningColor
               : PersonalizedColors.errorColor;
       cards.add(
