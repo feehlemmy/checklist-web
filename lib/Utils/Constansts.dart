@@ -1,6 +1,5 @@
 class Constants {
   //static String baseURL = "http://192.168.1.209:8080/";
-
   static String baseURL = "http://localhost:8080/";
 
   static String administrativo = 'Qualidade';

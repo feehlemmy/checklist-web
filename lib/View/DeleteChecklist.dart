@@ -1,22 +1,17 @@
-import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-
 import 'package:flutter/services.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:projeto_kva/Controller/Controller.dart';
 import 'package:projeto_kva/ModelReactive/CheckListAnswerReactive.dart';
 import 'package:projeto_kva/ModelReactive/QuestionAnswerReactive.dart';
 import 'package:projeto_kva/Utils/PersonalizedColors.dart';
 import 'package:projeto_kva/Utils/WidgetsCommon.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -50,9 +45,15 @@ class DeleteChecklist extends StatelessWidget {
   }
 
   buildPage(double height, double width, bool small, BuildContext context) {
-    var items = <String>["Lote", 'Número de Série', 'Data'];
+    var items = <String>[
+      "Lote",
+      'Número de Série',
+      'Data',
+    ];
+    ScrollController scrollController = ScrollController();
 
-    var status = <String>["Todos", 'Aprovado', 'Retrabalhado', 'Reprovado'];
+    var mapOfProductIdAndTile = Controller.to.getMapOfProductIdChecklistTitle();
+    RxList<String> prodList = RxList.empty(growable: true);
 
     var outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
@@ -70,26 +71,20 @@ class DeleteChecklist extends StatelessWidget {
     );
 
     items.sort();
-    status.sort();
-
     RxString parameter = "".obs;
-    ScrollController scrollController = ScrollController();
+    RxString productFilterName = "Todos".obs;
 
     RxString optionValue = 'Lote'.obs;
+
+    var status = <String>["Todos", 'Aprovado', 'Retrabalhado', 'Reprovado'];
+    status.sort();
     RxString statusValue = 'Todos'.obs;
 
-    List<String> productNameList = Controller.to.productNameList.length > 0
-        ? Controller.to.buildProductNameList()
-        : ['Não há produto cadastrado'];
-    if (Controller.to.buildProductNameList().length > 0) {
-      productNameList.add('Todos');
-    }
-    productNameList.sort();
-    RxString productName = 'Todos'.obs;
-    productName = productNameList.length > 0
-        ? productNameList[0].obs
-        : 'Não há produto cadastrado'.obs;
-    RxList<Obx> cards = RxList.empty(growable: true);
+    Controller.to.buildProductNameList();
+    Controller.to.productNameList.add('Todos');
+    Controller.to.productNameList.sort();
+    prodList = Controller.to.productNameList.obs;
+
     var buttonAllPdf = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -98,7 +93,7 @@ class DeleteChecklist extends StatelessWidget {
             height: height * .065,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
+                    backgroundColor: Colors.white,
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                     )),
@@ -117,49 +112,9 @@ class DeleteChecklist extends StatelessWidget {
         children: [
           Obx(() => Wrap(children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      width: 11.w,
-                      height: 6.h,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white,
-                              style: BorderStyle.solid,
-                              width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(50))),
-                      child: DropdownButton(
-                        onChanged: (String? newValue) {
-                          productName.value = newValue!;
-                        },
-                        selectedItemBuilder: (BuildContext context) {
-                          return productNameList.map<Widget>((String item) {
-                            return Container(
-                              alignment: Alignment.center,
-                              child: CommonWidgets.buildText(
-                                  item, 14, Colors.white, TextAlign.center),
-                            );
-                          }).toList();
-                        },
-                        items: productNameList.map((String option) {
-                          return DropdownMenuItem(
-                            child: CommonWidgets.buildText(
-                                option, 14, Colors.white, TextAlign.center),
-                            value: option,
-                          );
-                        }).toList(),
-                        value: productName.value,
-                        dropdownColor: PersonalizedColors.skyBlue,
-                        isExpanded: true,
-                        isDense: false,
-                        underline: SizedBox(),
-                      ).marginOnly(
-                        left: 10,
-                        right: 10,
-                      ),
-                    ),
-                    Container(
-                      width: small == true ? width * .2 : width * .11,
+                      width: small == true ? width * .2 : width * .15,
                       height: height * .07,
                       decoration: BoxDecoration(
                           border: Border.all(
@@ -169,6 +124,104 @@ class DeleteChecklist extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(50))),
                       child: DropdownButton(
                         // Not necessary for Option 1
+                        onChanged: (String? newValue) {
+                          int productId =
+                              Controller.to.findProductIdByName(newValue!);
+                          prodList.value =
+                              findTitlesById(productId, mapOfProductIdAndTile);
+                          if (prodList.isNotEmpty) {
+                            productFilterName.value = prodList.value[0];
+                          }
+                          prodList.add('Todos');
+
+                          if (newValue == "Todos") {
+                            productFilterName.value = 'Todos';
+                          }
+                          Controller.to.productName.value = newValue;
+                        },
+                        selectedItemBuilder: (BuildContext context) {
+                          return Controller.to.productNameList
+                              .map<Widget>((String item) {
+                            return Container(
+                              alignment: Alignment.center,
+                              child: CommonWidgets.buildText(
+                                  item, 14, Colors.white, TextAlign.center),
+                            );
+                          }).toList();
+                        },
+
+                        items:
+                            Controller.to.productNameList.map((String option) {
+                          return DropdownMenuItem(
+                            child: CommonWidgets.buildText(
+                                option, 14, Colors.white, TextAlign.center),
+                            value: option,
+                          );
+                        }).toList(),
+                        value: Controller.to.productName.value,
+                        dropdownColor: PersonalizedColors.skyBlue,
+                        isExpanded: true,
+                        isDense: false,
+                        underline: SizedBox(),
+                      ).marginOnly(
+                        left: 10,
+                        right: 10,
+                      ),
+                    ),
+                    Obx(() => Container(
+                          width: small == true ? width * .2 : width * .12,
+                          height: height * .07,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.white,
+                                  style: BorderStyle.solid,
+                                  width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          child: DropdownButton(
+                            // Not necessary for Option 1
+                            onChanged: (String? newValue) {
+                              productFilterName.value = newValue!;
+                              print(productFilterName.value);
+                            },
+                            selectedItemBuilder: (BuildContext context) {
+                              return prodList.map<Widget>((String item) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  child: CommonWidgets.buildText(
+                                      item, 14, Colors.white, TextAlign.center),
+                                );
+                              }).toList();
+                            },
+
+                            items: prodList.map((String option) {
+                              return DropdownMenuItem(
+                                child: CommonWidgets.buildText(
+                                    option, 14, Colors.white, TextAlign.center),
+                                value: option,
+                              );
+                            }).toList(),
+                            value: productFilterName.value,
+                            dropdownColor: PersonalizedColors.skyBlue,
+                            isExpanded: true,
+
+                            isDense: false,
+                            underline: SizedBox(),
+                          ).marginOnly(
+                            left: 10,
+                            right: 10,
+                          ),
+                        )).marginOnly(left: width * 0.02),
+                    Container(
+                      width: small == true ? width * .17 : width * .12,
+                      height: height * .07,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.white,
+                              style: BorderStyle.solid,
+                              width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: DropdownButton(
                         onChanged: (String? newValue) {
                           optionValue.value = newValue!;
                         },
@@ -181,7 +234,6 @@ class DeleteChecklist extends StatelessWidget {
                             );
                           }).toList();
                         },
-
                         items: items.map((String option) {
                           return DropdownMenuItem(
                             child: CommonWidgets.buildText(
@@ -200,8 +252,8 @@ class DeleteChecklist extends StatelessWidget {
                       ),
                     ).marginOnly(left: width * 0.02),
                     Container(
-                      width: 11.w,
-                      height: 6.h,
+                      width: width * .1,
+                      height: height * .07,
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Colors.white,
@@ -240,7 +292,7 @@ class DeleteChecklist extends StatelessWidget {
                     ).marginOnly(left: width * 0.02),
                     optionValue.value != "Data"
                         ? Container(
-                            width: small == true ? width * .12 : width * .15,
+                            width: small == true ? width * .1 : width * .1,
                             height: height * .1,
                             child: Container(
                               height: height * .1,
@@ -250,7 +302,15 @@ class DeleteChecklist extends StatelessWidget {
                                     textStyle: TextStyle(
                                         color: Colors.white, fontSize: 14)),
                                 decoration: InputDecoration(
-                                  hintText: "Pesquisar",
+                                  hintText: optionValue.value,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: optionValue.value,
+                                  labelStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  )),
                                   border: outlineInputBorder,
                                   enabledBorder: outlineInputBorder,
                                   focusedBorder: enableBorder,
@@ -274,7 +334,7 @@ class DeleteChecklist extends StatelessWidget {
                             children: [
                               Container(
                                   width:
-                                      small == true ? width * .1 : width * .11,
+                                      small == true ? width * .1 : width * .1,
                                   height: height * .07,
                                   child: DateTimePicker(
                                       autovalidate: false,
@@ -288,7 +348,7 @@ class DeleteChecklist extends StatelessWidget {
                                         ),
                                         hintStyle: GoogleFonts.montserrat(
                                             textStyle: TextStyle(
-                                                fontSize: 12,
+                                                fontSize: 14,
                                                 color: Colors.white,
                                                 textBaseline:
                                                     TextBaseline.alphabetic)),
@@ -304,7 +364,7 @@ class DeleteChecklist extends StatelessWidget {
                                       lastDate: DateTime(2100),
                                       style: GoogleFonts.montserrat(
                                           textStyle: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         color: Colors.white,
                                       )),
                                       textAlign: TextAlign.center,
@@ -318,7 +378,7 @@ class DeleteChecklist extends StatelessWidget {
                                       })).marginOnly(left: width * 0.02),
                               Container(
                                   width:
-                                      small == true ? width * .1 : width * .11,
+                                      small == true ? width * .1 : width * .1,
                                   height: height * .07,
                                   child: DateTimePicker(
                                       autovalidate: false,
@@ -332,7 +392,7 @@ class DeleteChecklist extends StatelessWidget {
                                         ),
                                         hintStyle: GoogleFonts.montserrat(
                                             textStyle: TextStyle(
-                                                fontSize: 12,
+                                                fontSize: 14,
                                                 color: Colors.white,
                                                 textBaseline:
                                                     TextBaseline.alphabetic)),
@@ -348,7 +408,7 @@ class DeleteChecklist extends StatelessWidget {
                                       lastDate: DateTime(2100),
                                       style: GoogleFonts.montserrat(
                                           textStyle: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         color: Colors.white,
                                       )),
                                       textAlign: TextAlign.center,
@@ -365,77 +425,119 @@ class DeleteChecklist extends StatelessWidget {
                                       })).marginOnly(left: width * 0.02),
                             ],
                           ),
-                    Container(
-                      width: small == true ? width * .05 : width * .05,
-                      height: height * .065,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: PersonalizedColors.lightGreen,
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(60.0),
-                              )),
-                          onPressed: () async {
-                            cards.value = [];
-                            Controller.to.visible.value = true;
-                            Controller.to.countSearch.value = 0;
-                            await Controller.to.searchResponseCheckList(
-                                productName.value!,
-                                optionValue.value!,
-                                parameter.value!,
-                                null,
-                                null,
-                                statusValue.value!,
-                                'Todos');
-
-                            if (Controller.to.ansewersListReactive.isEmpty) {
-                              Controller.to.visible.value = false;
-                              Controller.to.allPdf.value = false;
-                              Controller.to.snackbar(
-                                  'Por favor verifique os parâmetros de busca',
-                                  'Não foi possível encontrar checklists',
-                                  PersonalizedColors.errorColor);
-                            } else {
-                              Controller.to.visible.value = false;
-                              cards.value = buildCards(
-                                  height, width, small, cards, context);
-                              Controller.to.countSearch.value =
-                                  Controller.to.ansewersListReactive.length;
-
-                              if (optionValue.value == 'Número de Série' &&
-                                  Controller.to.countSearch.value > 0) {
-                                Controller.to.allPdf.value = true;
-                              } else {
-                                Controller.to.allPdf.value = false;
-                              }
-                            }
-                          },
-                          child: CommonWidgets.buildText(
-                              "Buscar", 14, Colors.white, TextAlign.center)),
-                    ).marginOnly(left: width * 0.02),
-                    Obx(() => Controller.to.countSearch.value > 0
-                        ? Container(
-                            width: small == true ? width * .08 : width * .08,
-                            child: CommonWidgets.buildText(
-                                "Itens Encontrados: " +
-                                    Controller.to.ansewersListReactive.length
-                                        .toString(),
-                                14,
-                                Colors.white,
-                                TextAlign.center),
-                          ).marginOnly(left: width * 0.01)
-                        : Container())
                   ],
-                )
-              ]).marginOnly(
-                  top: height * 0.05, left: width * 0.08, right: width * 0.08)),
-          Obx(() =>
-              Controller.to.allPdf.value != false ? buttonAllPdf : Container()),
+                ).marginOnly(
+                    top: height * 0.05, left: width * 0.1, right: width * 0.1),
+              ])),
+          Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: small == true ? width * .15 : width * .08,
+                    height: height * .065,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: PersonalizedColors.lightGreen,
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(60.0),
+                            )),
+                        onPressed: () async {
+                          Controller.to.offset.value = 0;
+                          Controller.to.cards.value = [];
+                          Controller.to.visible.value = true;
+                          Controller.to.countSearch.value = 0;
+                          await Controller.to.searchResponseCheckList(
+                              Controller.to.productName.value,
+                              optionValue.value,
+                              parameter.value,
+                              '30',
+                              '0',
+                              statusValue.value,
+                              productFilterName.value);
+
+                          if (Controller.to.ansewersListReactive.isEmpty) {
+                            Controller.to.visible.value = false;
+                            Controller.to.snackbar(
+                                'Por favor verifique os parâmetros de busca',
+                                'Não foi possível encontrar checklists',
+                                PersonalizedColors.errorColor);
+                          } else {
+                            Controller.to.visible.value = false;
+                            Controller.to.cards.value = buildCards(height,
+                                width, small, Controller.to.cards, context);
+                            Controller.to.countSearch.value =
+                                Controller.to.ansewersListReactive.length;
+                          }
+                        },
+                        child: CommonWidgets.buildText(
+                            "Buscar", 14, Colors.white, TextAlign.center)),
+                  ).marginOnly(left: width * 0.01),
+                  Controller.to.countSearch.value > 0
+                      ? Container(
+                          width: width * .1,
+                          child: CommonWidgets.buildText(
+                              "Itens Encontrados: " +
+                                  Controller.to.sizeOfResponse2.value
+                                      .toString(),
+                              8,
+                              Colors.white,
+                              TextAlign.center),
+                        ).marginOnly(left: width * 0.01)
+                      : Container(),
+                ],
+              )).marginOnly(bottom: height * 0.01, top: height * 0.01),
+          Obx(() => Controller.to.sizeOfResponse.value > 30
+              ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Controller.to.offset.value >= 30
+                      ? Container(
+                          child: ElevatedButton(
+                          child: Text('Página Anterior'),
+                          onPressed: () async {
+                            Controller.to.cards.value = [];
+                            Controller.to.offset.value =
+                                Controller.to.offset.value - 30;
+                            await Controller.to.searchResponseCheckList(
+                                Controller.to.productName.value,
+                                optionValue.value,
+                                parameter.value,
+                                '30',
+                                Controller.to.offset.value.toString(),
+                                statusValue.value,
+                                productFilterName.value);
+                            Controller.to.cards.value = buildCards(height,
+                                width, small, Controller.to.cards, context);
+                          },
+                        )).marginOnly(right: width * 0.01)
+                      : Container(),
+                  Controller.to.offset.value <
+                          Controller.to.sizeOfResponse.value
+                      ? Container(
+                          child: ElevatedButton(
+                              child: Text('Proxima Página'),
+                              onPressed: () async {
+                                Controller.to.cards.value = [];
+                                Controller.to.offset.value =
+                                    Controller.to.offset.value + 30;
+                                await Controller.to.searchResponseCheckList(
+                                    Controller.to.productName.value,
+                                    optionValue.value,
+                                    parameter.value,
+                                    '30',
+                                    Controller.to.offset.value.toString(),
+                                    statusValue.value,
+                                    productFilterName.value);
+                                Controller.to.cards.value = buildCards(height,
+                                    width, small, Controller.to.cards, context);
+                              }))
+                      : Container()
+                ])
+              : Container()),
           Expanded(
               child: Scrollbar(
                   interactive: true,
                   showTrackOnHover: true,
                   controller: scrollController, // <---- Here, the controller
-                  isAlwaysShown: true,
+                  thumbVisibility: true,
                   child: ListView(
                       controller:
                           scrollController, // <---- Same as the Scrollbar controller
@@ -455,17 +557,27 @@ class DeleteChecklist extends StatelessWidget {
                             : GridView.count(
                                     shrinkWrap: true,
                                     addRepaintBoundaries: true,
-                                    childAspectRatio: 1.6,
+                                    childAspectRatio: 1.8,
                                     crossAxisCount: small == true ? 2 : 3,
-                                    padding: EdgeInsets.all(20),
+                                    padding: EdgeInsets.all(30),
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20,
                                     // ignore: invalid_use_of_protected_member
-                                    children: cards.value)
+                                    children: Controller.to.cards.value)
                                 .marginOnly(
                                     left: width * .1, right: width * .1))
                       ]))),
         ]);
+  }
+
+  findTitlesById(int productId, Map<String, int> mapOfProductIdAndTitle) {
+    var prodList = <String>[];
+    for (var item in mapOfProductIdAndTitle.entries) {
+      if (item.value == productId) {
+        prodList.add(item.key);
+      }
+    }
+    return prodList;
   }
 
   buildCards(double height, double width, bool small, List<Obx> cards,
@@ -475,10 +587,10 @@ class DeleteChecklist extends StatelessWidget {
     for (CheckListAnswerReactive checklistSkeletonAux
         in Controller.to.ansewersListReactive) {
       final checklist = checklistSkeletonAux.obs;
-      Color color = checklist.value!.statusOfCheckList! == "Aprovado"
+      Color color = checklist.value.statusOfCheckList! == "Aprovado"
           ? PersonalizedColors.darkGreen
-          : checklist.value!.statusOfCheckList! == "Retrabalhado" ||
-                  checklist.value!.statusOfCheckList! == "Retrabalho"
+          : checklist.value.statusOfCheckList! == "Retrabalhado" ||
+                  checklist.value.statusOfCheckList! == "Retrabalho"
               ? PersonalizedColors.warningColor
               : PersonalizedColors.errorColor;
       cards.add(
@@ -494,7 +606,7 @@ class DeleteChecklist extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CommonWidgets.buildText(checklist.value!.title!.value!, 12,
+                  CommonWidgets.buildText(checklist.value.title!.value, 12,
                       Colors.white, TextAlign.center),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -502,7 +614,7 @@ class DeleteChecklist extends StatelessWidget {
                       CommonWidgets.buildText(
                           "Nº de Série: ", 14, Colors.white, TextAlign.center),
                       CommonWidgets.buildText(
-                          checklist.value!.serieNumber!.value!,
+                          checklist.value.serieNumber!.value,
                           14,
                           Colors.white,
                           TextAlign.center),
@@ -513,8 +625,8 @@ class DeleteChecklist extends StatelessWidget {
                     children: [
                       CommonWidgets.buildText(
                           "Lote: ", 14, Colors.white, TextAlign.center),
-                      CommonWidgets.buildText(checklist.value!.batch!.value!,
-                          14, Colors.white, TextAlign.center),
+                      CommonWidgets.buildText(checklist.value.batch!.value, 14,
+                          Colors.white, TextAlign.center),
                     ],
                   ),
                   Row(
@@ -524,7 +636,7 @@ class DeleteChecklist extends StatelessWidget {
                           "Data: ", 14, Colors.white, TextAlign.center),
                       CommonWidgets.buildText(
                           CommonWidgets.getFormatter()
-                              .format(checklist.value!.date!),
+                              .format(checklist.value.date!),
                           14,
                           Colors.white,
                           TextAlign.center),
@@ -535,14 +647,14 @@ class DeleteChecklist extends StatelessWidget {
                     children: [
                       CommonWidgets.buildText(
                           "Setor: ", 14, Colors.white, TextAlign.center),
-                      CommonWidgets.buildText(checklist.value!.sector!.value!,
-                          14, Colors.white, TextAlign.center),
+                      CommonWidgets.buildText(checklist.value.sector!.value, 14,
+                          Colors.white, TextAlign.center),
                     ],
                   ),
                   Container(
                     height: 0.5,
                   ),
-                  CommonWidgets.buildText(checklist.value!.statusOfCheckList!,
+                  CommonWidgets.buildText(checklist.value.statusOfCheckList!,
                       14, color, TextAlign.center),
                   Container(
                     height: 0.5,
@@ -551,8 +663,8 @@ class DeleteChecklist extends StatelessWidget {
               ),
             ),
             onTap: () {
-              showCheckList(checklist.value!, context, height, width, small,
-                  splitQuestionsByCategory(checklist.value!.questions!));
+              showCheckList(checklist.value, context, height, width, small,
+                  splitQuestionsByCategory(checklist.value.questions!));
             },
           ),
         ),
@@ -563,7 +675,7 @@ class DeleteChecklist extends StatelessWidget {
 
   splitQuestionsByCategory(List<QuestionAnswerReactive> questionList) {
     questionList.sort((a, b) =>
-        int.parse(a.position!.value!).compareTo(int.parse(b.position!.value!)));
+        int.parse(a.position!.value).compareTo(int.parse(b.position!.value)));
 
     return questionList;
   }
@@ -600,7 +712,7 @@ class DeleteChecklist extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                child: AutoSizeText(checkListAnswer.title!.value!,
+                child: AutoSizeText(checkListAnswer.title!.value,
                     style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                       color: Colors.white,
@@ -631,7 +743,7 @@ class DeleteChecklist extends StatelessWidget {
                   Container(
                           width: width * 0.25,
                           child: AutoSizeText(
-                              "Lote: " + checkListAnswer.batch!.value!,
+                              "Lote: " + checkListAnswer.batch!.value,
                               style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                 color: Colors.white,
@@ -643,7 +755,7 @@ class DeleteChecklist extends StatelessWidget {
                   Container(
                       width: width * 0.25,
                       child: AutoSizeText(
-                          "Nº de Série: " + checkListAnswer.serieNumber!.value!,
+                          "Nº de Série: " + checkListAnswer.serieNumber!.value,
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             color: Colors.white,
@@ -654,7 +766,7 @@ class DeleteChecklist extends StatelessWidget {
                   Container(
                       width: width * 0.25,
                       child: AutoSizeText(
-                          "Versão: " + checkListAnswer.productVersion!.value!,
+                          "Versão: " + checkListAnswer.productVersion!.value,
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             color: Colors.white,
@@ -671,7 +783,7 @@ class DeleteChecklist extends StatelessWidget {
                   Container(
                       width: width * 0.25,
                       child: AutoSizeText(
-                          "Reponsável: " + checkListAnswer.nameOfUser!.value!,
+                          "Reponsável: " + checkListAnswer.nameOfUser!.value,
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             color: Colors.white,
@@ -698,8 +810,7 @@ class DeleteChecklist extends StatelessWidget {
                             children: [
                               Container(
                                   child: AutoSizeText(
-                                      "Setor: " +
-                                          checkListAnswer.sector!.value!,
+                                      "Setor: " + checkListAnswer.sector!.value,
                                       style: GoogleFonts.montserrat(
                                           textStyle: TextStyle(
                                         color: Colors.white,
@@ -717,11 +828,11 @@ class DeleteChecklist extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                checkListAnswer.origin!.value! != ""
+                checkListAnswer.origin!.value != ""
                     ? Container(
                         width: width * 0.25,
                         child: AutoSizeText(
-                            "Origem: " + checkListAnswer.origin!.value!,
+                            "Origem: " + checkListAnswer.origin!.value,
                             style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                               color: Colors.white,
@@ -730,12 +841,12 @@ class DeleteChecklist extends StatelessWidget {
                             maxFontSize: 14,
                             textAlign: TextAlign.start))
                     : Container(),
-                checkListAnswer.testEnvironment!.value! != ""
+                checkListAnswer.testEnvironment!.value != ""
                     ? Container(
                         width: width * 0.25,
                         child: AutoSizeText(
                             "Ambiente de Teste: " +
-                                checkListAnswer.testEnvironment!.value!,
+                                checkListAnswer.testEnvironment!.value,
                             style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                               color: Colors.white,
@@ -884,7 +995,7 @@ class DeleteChecklist extends StatelessWidget {
               showTrackOnHover: true,
 
               controller: scrollController, // <---- Here, the controller
-              isAlwaysShown: true,
+              thumbVisibility: true,
               child: ListView(
                   controller:
                       scrollController, // <---- Same as the Scrollbar controller
@@ -892,13 +1003,13 @@ class DeleteChecklist extends StatelessWidget {
                     Container(
                         child: buildQuestions(height, width, small,
                             listQuestionsSplitedByCategory, checkListAnswer)),
-                    checkListAnswer.observation!.value! != ""
+                    checkListAnswer.observation!.value != ""
                         ? Container(
                             alignment: Alignment.centerLeft,
                             width: width * 0.25,
                             child: AutoSizeText(
                                 "Observação: " +
-                                    checkListAnswer.observation!.value!,
+                                    checkListAnswer.observation!.value,
                                 style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                   color: Colors.white,
@@ -970,8 +1081,8 @@ class DeleteChecklist extends StatelessWidget {
     final url = html.Url.createObjectUrlFromBlob(blob);
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
-      ..style.display = 'CheckList' + checkListAnswer.serieNumber!.value!
-      ..download = checkListAnswer.serieNumber!.value! + '.pdf';
+      ..style.display = 'CheckList' + checkListAnswer.serieNumber!.value
+      ..download = checkListAnswer.serieNumber!.value + '.pdf';
     html.document.body!.children.add(anchor);
     anchor.click();
     html.document.body!.children.remove(anchor);
@@ -1022,9 +1133,9 @@ class DeleteChecklist extends StatelessWidget {
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
       ..style.display =
-          'Vida do CheckList' + ansewersListReactive[0].serieNumber!.value!
+          'Vida do CheckList' + ansewersListReactive[0].serieNumber!.value
       ..download = 'Vida do CheckList' +
-          ansewersListReactive[0].serieNumber!.value! +
+          ansewersListReactive[0].serieNumber!.value +
           '.pdf';
     html.document.body!.children.add(anchor);
     anchor.click();
@@ -1067,9 +1178,9 @@ buildQuestions(
 
     buildQuestionWidget(rows, question, height, width, small, answer);
 
-    category == question.category!.value!
+    category == question.category!.value
         ? category = category
-        : category = question.category!.value!;
+        : category = question.category!.value;
   }
 
   return Table(
@@ -1095,15 +1206,15 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
   if (question.disapproved == null) {
     question.disapproved = false.obs;
   }
-  if (question.approved!.value! == false &&
-      question.disapproved!.value! == false) {
+  if (question.approved!.value == false &&
+      question.disapproved!.value == false) {
     status = "Não testado";
-  } else if (question.approved!.value! == false &&
-      question.disapproved!.value! == true) {
+  } else if (question.approved!.value == false &&
+      question.disapproved!.value == true) {
     status = "Reprovado";
     colorStatus = PersonalizedColors.errorColor;
-  } else if (question.approved!.value! == true &&
-      question.disapproved!.value! == false) {
+  } else if (question.approved!.value == true &&
+      question.disapproved!.value == false) {
     status = "Aprovado";
     colorStatus = PersonalizedColors.darkGreen;
   }
@@ -1117,7 +1228,7 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
           child: Container(
             width: width * 0.2,
             child: Tooltip(
-              message: question.tooltip!.value!,
+              message: question.tooltip!.value,
               decoration: BoxDecoration(
                   color: Colors.blueGrey[700],
                   borderRadius: BorderRadius.circular(90)),
@@ -1128,7 +1239,7 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
                 fontSize: 14,
                 color: Colors.white,
               )),
-              child: AutoSizeText(question.description!.value!,
+              child: AutoSizeText(question.description!.value,
                   style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                     color: Colors.white,
@@ -1219,7 +1330,7 @@ showConfirmation(small, width, height, CheckListAnswerReactive answer) {
               )),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: PersonalizedColors.redAccent,
+                backgroundColor: PersonalizedColors.redAccent,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                 )),
@@ -1260,14 +1371,14 @@ showConfirmation(small, width, height, CheckListAnswerReactive answer) {
 
 void buildCategoryWidget(String category, QuestionAnswerReactive question,
     List<TableRow> rows, double width) {
-  category == question.category!.value!
+  category == question.category!.value
       ? rows.isEmpty
           ? rows.add(TableRow(children: [
               TableCell(
                   child: Container(
                       width: width * 0.1,
                       child: AutoSizeText(
-                        question.category!.value!,
+                        question.category!.value,
                         style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                           color: Colors.white,
@@ -1291,7 +1402,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
               child: Container(
                   width: width * 0.1,
                   child: AutoSizeText(
-                    question.category!.value!,
+                    question.category!.value,
                     style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                       color: Colors.white,
