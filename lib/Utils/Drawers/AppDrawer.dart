@@ -92,7 +92,7 @@ buildButtonLogout(double height, double width, small) {
     height: height * .05,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: PersonalizedColors.redAccent,
+          backgroundColor: PersonalizedColors.redAccent,
           shape: new RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(60.0),
           )),
@@ -120,7 +120,7 @@ showConfirmation(int index) {
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: PersonalizedColors.lightGreen,
+                backgroundColor: PersonalizedColors.lightGreen,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                 )),
@@ -139,7 +139,7 @@ showConfirmation(int index) {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: PersonalizedColors.redAccent,
+                backgroundColor: PersonalizedColors.redAccent,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                 )),

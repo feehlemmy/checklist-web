@@ -95,7 +95,7 @@ class ChecklistReport extends StatelessWidget {
             height: height * .065,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
+                    backgroundColor: Colors.white,
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                     )),
@@ -300,7 +300,7 @@ class ChecklistReport extends StatelessWidget {
                               height: height * .1,
                               child: TextFormField(
                                 autofocus: false,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                         color: Colors.white, fontSize: 14)),
                                 decoration: InputDecoration(
@@ -308,7 +308,7 @@ class ChecklistReport extends StatelessWidget {
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelText: optionValue.value,
-                                  labelStyle: GoogleFonts.montserrat(
+                                  labelStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -316,12 +316,12 @@ class ChecklistReport extends StatelessWidget {
                                   border: outlineInputBorder,
                                   enabledBorder: outlineInputBorder,
                                   focusedBorder: enableBorder,
-                                  errorStyle: GoogleFonts.montserrat(
+                                  errorStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
                                   )),
-                                  hintStyle: GoogleFonts.montserrat(
+                                  hintStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -348,7 +348,7 @@ class ChecklistReport extends StatelessWidget {
                                             width: 1.0,
                                           ),
                                         ),
-                                        hintStyle: GoogleFonts.montserrat(
+                                        hintStyle: GoogleFonts.exo2(
                                             textStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.white,
@@ -364,7 +364,7 @@ class ChecklistReport extends StatelessWidget {
                                       firstDate: DateTime(2021),
                                       cursorRadius: Radius.circular(90),
                                       lastDate: DateTime(2100),
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
@@ -392,7 +392,7 @@ class ChecklistReport extends StatelessWidget {
                                             width: 1.0,
                                           ),
                                         ),
-                                        hintStyle: GoogleFonts.montserrat(
+                                        hintStyle: GoogleFonts.exo2(
                                             textStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.white,
@@ -408,7 +408,7 @@ class ChecklistReport extends StatelessWidget {
                                       firstDate: DateTime(2000),
                                       cursorRadius: Radius.circular(90),
                                       lastDate: DateTime(2100),
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
@@ -436,7 +436,7 @@ class ChecklistReport extends StatelessWidget {
             height: height * .065,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: PersonalizedColors.lightGreen,
+                    backgroundColor: PersonalizedColors.lightGreen,
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                     )),
@@ -491,9 +491,8 @@ class ChecklistReport extends StatelessWidget {
           Expanded(
               child: Scrollbar(
                   interactive: true,
-                  showTrackOnHover: true,
+                  trackVisibility: true,
                   controller: scrollController, // <---- Here, the controller
-                  isAlwaysShown: true,
                   child: ListView(
                       controller:
                           scrollController, // <---- Same as the Scrollbar controller
@@ -623,7 +622,7 @@ class ChecklistReport extends StatelessWidget {
                   Container(
                           alignment: Alignment.center,
                           child: AutoSizeText(checkListAnswer.title!.value!,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -646,7 +645,7 @@ class ChecklistReport extends StatelessWidget {
               ).marginOnly(top: height * 0.02)
             : Container(
                     child: AutoSizeText(checkListAnswer.title!.value!,
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.exo2(
                             textStyle: TextStyle(
                           color: Colors.white,
                         )),
@@ -663,7 +662,7 @@ class ChecklistReport extends StatelessWidget {
                           width: width * 0.3,
                           child: AutoSizeText(
                               "Lote: " + checkListAnswer.batch!.value!,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -675,7 +674,7 @@ class ChecklistReport extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Nº de Série: " + checkListAnswer.serieNumber!.value!,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -686,7 +685,7 @@ class ChecklistReport extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Versão: " + checkListAnswer.productVersion!.value!,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -703,7 +702,7 @@ class ChecklistReport extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Reponsável: " + checkListAnswer.nameOfUser!.value!,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -716,7 +715,7 @@ class ChecklistReport extends StatelessWidget {
                           "Data: " +
                               CommonWidgets.getFormatter()
                                   .format(checkListAnswer.date!),
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -730,7 +729,7 @@ class ChecklistReport extends StatelessWidget {
                           Container(
                               child: AutoSizeText(
                                   "Setor: " + checkListAnswer.sector!.value!,
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     color: Colors.white,
                                   )),
@@ -751,7 +750,7 @@ class ChecklistReport extends StatelessWidget {
                             width: width * 0.25,
                             child: AutoSizeText(
                                 "Origem: " + checkListAnswer.origin!.value!,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -767,7 +766,7 @@ class ChecklistReport extends StatelessWidget {
                             child: AutoSizeText(
                                 "Ambiente de Teste: " +
                                     checkListAnswer.testEnvironment!.value!,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -792,7 +791,7 @@ class ChecklistReport extends StatelessWidget {
                           child: AutoSizeText(
                               "Responsável Retrabalho: " +
                                   checkListAnswer.nameOfUserAssistance!,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -805,7 +804,7 @@ class ChecklistReport extends StatelessWidget {
                               "Data Retrabalho: " +
                                   CommonWidgets.getFormatter()
                                       .format(checkListAnswer.dateAssistance!),
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -830,7 +829,7 @@ class ChecklistReport extends StatelessWidget {
                             child: AutoSizeText(
                                 "Produto Retrabalhado: " +
                                     checkListAnswer.statusOfCheckList!,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: PersonalizedColors.warningColor,
                                 )),
@@ -841,7 +840,7 @@ class ChecklistReport extends StatelessWidget {
                             width: width * 0.25,
                             child:
                                 AutoSizeText("Causa: " + checkListAnswer.cause!,
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
                                       color: Colors.white,
                                     )),
@@ -865,7 +864,7 @@ class ChecklistReport extends StatelessWidget {
                                   child: AutoSizeText(
                                       "Solução: " +
                                           checkListAnswer.causeDescription!,
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         color: Colors.white,
                                       )),
@@ -889,7 +888,7 @@ class ChecklistReport extends StatelessWidget {
                           Container(
                               width: width * 0.25,
                               child: AutoSizeText("Produto Aprovado",
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     color: PersonalizedColors.lightGreen,
                                   )),
@@ -901,7 +900,7 @@ class ChecklistReport extends StatelessWidget {
                     Container(
                         width: width * 0.25,
                         child: AutoSizeText("Produto Reprovado",
-                            style: GoogleFonts.montserrat(
+                            style: GoogleFonts.exo2(
                                 textStyle: TextStyle(
                               color: PersonalizedColors.errorColor,
                             )),
@@ -913,10 +912,9 @@ class ChecklistReport extends StatelessWidget {
           child: Expanded(
             child: Scrollbar(
               interactive: true,
-              showTrackOnHover: true,
+              trackVisibility: true,
 
               controller: scrollController, // <---- Here, the controller
-              isAlwaysShown: true,
               child: ListView(
                   controller:
                       scrollController, // <---- Same as the Scrollbar controller
@@ -931,7 +929,7 @@ class ChecklistReport extends StatelessWidget {
                                 child: AutoSizeText(
                                     "Observação: " +
                                         checkListAnswer.observation!.value!,
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
                                       color: Colors.white,
                                     )),
@@ -947,7 +945,7 @@ class ChecklistReport extends StatelessWidget {
                                 child: AutoSizeText(
                                     "Motivo da Reprova: " +
                                         checkListAnswer.statusOfProduct!,
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
                                       color: Colors.white,
                                     )),
@@ -1166,13 +1164,13 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
                   borderRadius: BorderRadius.circular(90)),
               preferBelow: false,
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              textStyle: GoogleFonts.montserrat(
+              textStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
               )),
               child: AutoSizeText(question.description!.value!,
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.exo2(
                       textStyle: TextStyle(
                     color: Colors.white,
                   )),
@@ -1185,7 +1183,7 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
           child: Container(
         width: width * 0.01,
         child: AutoSizeText(status,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(
               color: colorStatus,
             )),
@@ -1209,7 +1207,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
                   child: Container(
                       child: AutoSizeText(
                 question.category!.value!,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   color: Colors.white,
                 )),
@@ -1232,7 +1230,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
               child: Container(
                   child: AutoSizeText(
             question.category!.value!,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(
               color: Colors.white,
             )),

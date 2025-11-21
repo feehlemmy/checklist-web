@@ -206,7 +206,7 @@ class Indicators extends StatelessWidget {
                       height: height * .04,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: PersonalizedColors.lightGreen,
+                              backgroundColor: PersonalizedColors.lightGreen,
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(60.0),
                               )),
@@ -261,7 +261,7 @@ class Indicators extends StatelessWidget {
                                                         'Aprovado']!
                                                     .toInt()
                                                     .toString(),
-                                            style: GoogleFonts.montserrat(
+                                            style: GoogleFonts.exo2(
                                                 textStyle: TextStyle(
                                               color: Colors.white,
                                             )),
@@ -279,7 +279,7 @@ class Indicators extends StatelessWidget {
                                                         'Reprovado']!
                                                     .toInt()
                                                     .toString(),
-                                            style: GoogleFonts.montserrat(
+                                            style: GoogleFonts.exo2(
                                                 textStyle: TextStyle(
                                               color: Colors.white,
                                             )),
@@ -299,7 +299,7 @@ class Indicators extends StatelessWidget {
                                                         100)
                                                     .toStringAsFixed(2) +
                                                 '%',
-                                            style: GoogleFonts.montserrat(
+                                            style: GoogleFonts.exo2(
                                                 textStyle: TextStyle(
                                               color: Colors.white,
                                             )),
@@ -330,7 +330,7 @@ class Indicators extends StatelessWidget {
                                   ),
                                   chartValuesOptions: ChartValuesOptions(
                                     showChartValueBackground: false,
-                                    chartValueStyle: GoogleFonts.montserrat(
+                                    chartValueStyle: GoogleFonts.exo2(
                                         textStyle: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -354,7 +354,7 @@ class Indicators extends StatelessWidget {
                                           width: width * 0.25,
                                           child: AutoSizeText(
                                               "Causas de Reprovas: ",
-                                              style: GoogleFonts.montserrat(
+                                              style: GoogleFonts.exo2(
                                                   textStyle: TextStyle(
                                                 color: Colors.white,
                                               )),

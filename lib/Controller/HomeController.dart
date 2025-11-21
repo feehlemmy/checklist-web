@@ -77,7 +77,7 @@ class HomeController extends GetxController {
   buildTextSnackBar(String text) {
     return Text(
       text,
-      style: GoogleFonts.montserrat(
+      style: GoogleFonts.exo2(
           textStyle: TextStyle(
         fontSize: 14,
         color: Colors.white,
@@ -101,7 +101,7 @@ filterTypeOfUser(String? sector) {
           name: 'CheckLists Respondidos', iconData: Icons.list, index: 0),
       ItemDrawer(name: 'Criar CheckList', iconData: Icons.add, index: 1),
       ItemDrawer(
-          name: 'Administrar CheckLists', iconData: Icons.edit, index: 2),
+          name: 'Administrar CheckLists', iconData: Icons.note_alt, index: 2),
       ItemDrawer(name: 'Administrar Produtos', iconData: Icons.edit, index: 3),
       ItemDrawer(name: 'Criar Produto', iconData: Icons.add, index: 4),
       ItemDrawer(name: 'Administrar Usuários', iconData: Icons.edit, index: 5),

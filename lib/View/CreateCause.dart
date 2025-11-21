@@ -41,13 +41,13 @@ class CreateCause extends StatelessWidget {
         height: height * .07,
         child: TextFormField(
           autofocus: false,
-          style: GoogleFonts.montserrat(
+          style: GoogleFonts.exo2(
               textStyle: TextStyle(color: Colors.white, fontSize: 14)),
           decoration: InputDecoration(
             hintText: "Resumo da Causa",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: 'Resumo da Causa',
-            labelStyle: GoogleFonts.montserrat(
+            labelStyle: GoogleFonts.exo2(
                 textStyle: TextStyle(
               fontSize: 14,
               color: Colors.white,
@@ -55,12 +55,12 @@ class CreateCause extends StatelessWidget {
             border: outlineInputBorder,
             enabledBorder: outlineInputBorder,
             focusedBorder: enableBorder,
-            errorStyle: GoogleFonts.montserrat(
+            errorStyle: GoogleFonts.exo2(
                 textStyle: TextStyle(
               fontSize: 14,
               color: Colors.red,
             )),
-            hintStyle: GoogleFonts.montserrat(
+            hintStyle: GoogleFonts.exo2(
                 textStyle: TextStyle(
               fontSize: 14,
               color: Colors.white,
@@ -77,7 +77,7 @@ class CreateCause extends StatelessWidget {
         height: height * .05,
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: PersonalizedColors.lightGreen,
+                backgroundColor: PersonalizedColors.lightGreen,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                 )),

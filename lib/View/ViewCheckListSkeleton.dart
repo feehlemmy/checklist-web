@@ -66,19 +66,19 @@ class ViewCheckListSkeleton extends StatelessWidget {
         height: height * .07,
         child: TextFormField(
             autofocus: false,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(color: Colors.white, fontSize: 14)),
             decoration: InputDecoration(
               hintText: 'Pesquisar',
               border: outlineInputBorder,
               enabledBorder: outlineInputBorder,
               focusedBorder: enableBorder,
-              errorStyle: GoogleFonts.montserrat(
+              errorStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.red,
               )),
-              hintStyle: GoogleFonts.montserrat(
+              hintStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,

@@ -59,19 +59,19 @@ class AdministrateProduct extends StatelessWidget {
         height: height * .07,
         child: TextFormField(
             autofocus: false,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(color: Colors.white, fontSize: 14)),
             decoration: InputDecoration(
               hintText: 'Pesquisar',
               border: outlineInputBorder,
               enabledBorder: outlineInputBorder,
               focusedBorder: enableBorder,
-              errorStyle: GoogleFonts.montserrat(
+              errorStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.red,
               )),
-              hintStyle: GoogleFonts.montserrat(
+              hintStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
@@ -238,18 +238,18 @@ class AdministrateProduct extends StatelessWidget {
               height: height * .07,
               child: TextFormField(
                   autofocus: false,
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.exo2(
                       textStyle: TextStyle(color: Colors.white, fontSize: 14)),
                   decoration: InputDecoration(
                     border: outlineInputBorder,
                     enabledBorder: outlineInputBorder,
                     focusedBorder: enableBorder,
-                    errorStyle: GoogleFonts.montserrat(
+                    errorStyle: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       fontSize: 14,
                       color: Colors.red,
                     )),
-                    hintStyle: GoogleFonts.montserrat(
+                    hintStyle: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -317,7 +317,7 @@ class AdministrateProduct extends StatelessWidget {
                 height: height * .05,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
+                        backgroundColor: Colors.white,
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(60.0),
                         )),

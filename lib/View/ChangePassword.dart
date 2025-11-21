@@ -36,7 +36,7 @@ class ChangePassword extends StatelessWidget {
               autofocus: false,
               keyboardType: TextInputType.visiblePassword,
               obscureText: Controller.to.hiddenPassword.value!,
-              style: GoogleFonts.montserrat(
+              style: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
@@ -62,12 +62,12 @@ class ChangePassword extends StatelessWidget {
                 hintText: "Senha",
                 border: outlineInputBorder,
                 enabledBorder: outlineInputBorder,
-                errorStyle: GoogleFonts.montserrat(
+                errorStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.red,
                 )),
-                hintStyle: GoogleFonts.montserrat(
+                hintStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -85,7 +85,7 @@ class ChangePassword extends StatelessWidget {
               autofocus: false,
               keyboardType: TextInputType.visiblePassword,
               obscureText: Controller.to.hiddenPassword.value!,
-              style: GoogleFonts.montserrat(
+              style: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
@@ -111,12 +111,12 @@ class ChangePassword extends StatelessWidget {
                 hintText: "Confime a senha",
                 border: outlineInputBorder,
                 enabledBorder: outlineInputBorder,
-                errorStyle: GoogleFonts.montserrat(
+                errorStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.red,
                 )),
-                hintStyle: GoogleFonts.montserrat(
+                hintStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -132,14 +132,14 @@ class ChangePassword extends StatelessWidget {
         height: height * .05,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: PersonalizedColors.lightGreen,
+              backgroundColor: PersonalizedColors.lightGreen,
               shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(60.0),
               )),
           onPressed: () => {Controller.to.comparePasswords()},
           child: AutoSizeText(
             "Salvar",
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
               textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,

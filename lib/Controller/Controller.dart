@@ -515,7 +515,7 @@ class Controller extends GetxController {
   buildTextSnackBar(String text) {
     return Text(
       text,
-      style: GoogleFonts.montserrat(
+      style: GoogleFonts.exo2(
           textStyle: TextStyle(
         fontSize: 14,
         color: Colors.white,

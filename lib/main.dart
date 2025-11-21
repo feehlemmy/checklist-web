@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'CheckList KVA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          backgroundColor: PersonalizedColors.skyBlue,
+          canvasColor: PersonalizedColors.skyBlue,
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: Colors.white,
           )),

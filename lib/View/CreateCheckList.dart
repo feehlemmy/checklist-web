@@ -191,7 +191,7 @@ class CreateChecklist extends StatelessWidget {
               height: 6.h,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
+                      backgroundColor: Colors.white,
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(60.0),
                       )),
@@ -212,7 +212,7 @@ class CreateChecklist extends StatelessWidget {
                     height: 6.h,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: PersonalizedColors.lightGreen,
+                            backgroundColor: PersonalizedColors.lightGreen,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(60.0),
                             )),
@@ -294,14 +294,14 @@ class CreateChecklist extends StatelessWidget {
                 child: TextFormField(
                     initialValue: questionSkeletonReactive.category!.value,
                     autofocus: false,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle:
                             TextStyle(color: Colors.white, fontSize: 14)),
                     decoration: InputDecoration(
                       hintText: 'Categoria',
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelText: 'Categoria',
-                      labelStyle: GoogleFonts.montserrat(
+                      labelStyle: GoogleFonts.exo2(
                           textStyle: TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -309,12 +309,12 @@ class CreateChecklist extends StatelessWidget {
                       border: outlineInputBorder,
                       enabledBorder: outlineInputBorder,
                       focusedBorder: enableBorder,
-                      errorStyle: GoogleFonts.montserrat(
+                      errorStyle: GoogleFonts.exo2(
                           textStyle: TextStyle(
                         fontSize: 14,
                         color: Colors.red,
                       )),
-                      hintStyle: GoogleFonts.montserrat(
+                      hintStyle: GoogleFonts.exo2(
                           textStyle: TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -356,7 +356,7 @@ class CreateChecklist extends StatelessWidget {
                   height: 5.h,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
+                          backgroundColor: Colors.white,
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(60.0),
                           )),
@@ -418,13 +418,13 @@ class CreateChecklist extends StatelessWidget {
           height: 7.h,
           child: TextFormField(
               autofocus: false,
-              style: GoogleFonts.montserrat(
+              style: GoogleFonts.exo2(
                   textStyle: TextStyle(color: Colors.white, fontSize: 14)),
               decoration: InputDecoration(
                 hintText: "E-mail Interessado",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 labelText: 'E-mail Interessado',
-                labelStyle: GoogleFonts.montserrat(
+                labelStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -432,12 +432,12 @@ class CreateChecklist extends StatelessWidget {
                 border: outlineInputBorder,
                 enabledBorder: outlineInputBorder,
                 focusedBorder: enableBorder,
-                errorStyle: GoogleFonts.montserrat(
+                errorStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.red,
                 )),
-                hintStyle: GoogleFonts.montserrat(
+                hintStyle: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -456,7 +456,7 @@ class CreateChecklist extends StatelessWidget {
             height: 6.h,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
+                    backgroundColor: Colors.white,
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                     )),
@@ -511,7 +511,7 @@ class CreateChecklist extends StatelessWidget {
                 alignment: Alignment.center,
                 child: AutoSizeText(
                     'Título: ' + Controller.to.checklist.title!.value!,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),
@@ -533,7 +533,7 @@ class CreateChecklist extends StatelessWidget {
                                 "Produto: " +
                                     findProduct(Controller
                                         .to.checklist.productId!.value),
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -544,7 +544,7 @@ class CreateChecklist extends StatelessWidget {
                             child: AutoSizeText(
                                 "Setor: " +
                                     Controller.to.checklist.sector!.value!,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -556,7 +556,7 @@ class CreateChecklist extends StatelessWidget {
         Container(
                 width: 6.w,
                 child: AutoSizeText('Questões: ',
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),
@@ -570,7 +570,7 @@ class CreateChecklist extends StatelessWidget {
         Container(
                 width: 6.w,
                 child: AutoSizeText('Pessoas Interessadas: ',
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),
@@ -609,7 +609,7 @@ class CreateChecklist extends StatelessWidget {
             child: Row(
               children: [
                 AutoSizeText("E-mail Interessado: " + email.email!.value!,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),
@@ -643,7 +643,7 @@ class CreateChecklist extends StatelessWidget {
         Container(
             width: 15.w,
             child: AutoSizeText("Categoria: " + question.category!.value!,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   color: Colors.white,
                 )),
@@ -653,7 +653,7 @@ class CreateChecklist extends StatelessWidget {
         Container(
             width: 20.w,
             child: AutoSizeText("Questão: " + question.description!.value!,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   color: Colors.white,
                 )),
@@ -667,7 +667,7 @@ class CreateChecklist extends StatelessWidget {
             : Container(
                 width: 15.w,
                 child: AutoSizeText("Dica: " + question.tooltip!.value!,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),

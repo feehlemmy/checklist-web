@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_kva/Controller/Controller.dart';
 import 'package:projeto_kva/ModelReactive/CheckListAnswerReactive.dart';
 import 'package:projeto_kva/ModelReactive/QuestionAnswerReactive.dart';
+import 'package:projeto_kva/Utils/Constansts.dart';
 import 'package:projeto_kva/Utils/PersonalizedColors.dart';
 import 'package:projeto_kva/Utils/WidgetsCommon.dart';
 import 'package:pdf/pdf.dart';
@@ -179,7 +180,7 @@ class ChecklistDisapproved extends StatelessWidget {
                             child: TextFormField(
                               controller: Controller.to.textController,
                               autofocus: false,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                       color: Colors.white, fontSize: 14)),
                               decoration: InputDecoration(
@@ -187,12 +188,12 @@ class ChecklistDisapproved extends StatelessWidget {
                                 border: outlineInputBorder,
                                 enabledBorder: outlineInputBorder,
                                 focusedBorder: enableBorder,
-                                errorStyle: GoogleFonts.montserrat(
+                                errorStyle: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   fontSize: 14,
                                   color: Colors.red,
                                 )),
-                                hintStyle: GoogleFonts.montserrat(
+                                hintStyle: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   fontSize: 14,
                                   color: Colors.white,
@@ -218,9 +219,9 @@ class ChecklistDisapproved extends StatelessWidget {
                                           width: 1.0,
                                         ),
                                       ),
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.exo2(
                                           textStyle: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 14,
                                               color: Colors.white,
                                               textBaseline:
                                                   TextBaseline.alphabetic)),
@@ -234,9 +235,9 @@ class ChecklistDisapproved extends StatelessWidget {
                                     firstDate: DateTime(2021),
                                     cursorRadius: Radius.circular(90),
                                     lastDate: DateTime(2100),
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       color: Colors.white,
                                     )),
                                     textAlign: TextAlign.center,
@@ -261,9 +262,9 @@ class ChecklistDisapproved extends StatelessWidget {
                                           width: 1.0,
                                         ),
                                       ),
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.exo2(
                                           textStyle: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 14,
                                               color: Colors.white,
                                               textBaseline:
                                                   TextBaseline.alphabetic)),
@@ -277,9 +278,9 @@ class ChecklistDisapproved extends StatelessWidget {
                                     firstDate: DateTime(2000),
                                     cursorRadius: Radius.circular(90),
                                     lastDate: DateTime(2100),
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       color: Colors.white,
                                     )),
                                     textAlign: TextAlign.center,
@@ -307,7 +308,7 @@ class ChecklistDisapproved extends StatelessWidget {
                     height: height * .065,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: PersonalizedColors.lightGreen,
+                            backgroundColor: PersonalizedColors.lightGreen,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(60.0),
                             )),
@@ -401,9 +402,8 @@ class ChecklistDisapproved extends StatelessWidget {
           Expanded(
               child: Scrollbar(
                   interactive: true,
-                  showTrackOnHover: true,
+                  trackVisibility: true,
                   controller: scrollController, // <---- Here, the controller
-                  isAlwaysShown: true,
                   child: ListView(
                       controller:
                           scrollController, // <---- Same as the Scrollbar controller
@@ -524,367 +524,332 @@ class ChecklistDisapproved extends StatelessWidget {
   }
 
   void showCheckList(
-      CheckListAnswerReactive checkListAnswer,
-      BuildContext context,
-      double height,
-      double width,
-      bool small,
-      List<QuestionAnswerReactive> listQuestionsSplitedByCategory) {
-    Get.bottomSheet(
-        buildCompleteCheckList(checkListAnswer, width, small, height,
-            listQuestionsSplitedByCategory, false),
-        isDismissible: true,
-        elevation: 0,
-        backgroundColor: PersonalizedColors.skyBlue);
-  }
+    CheckListAnswerReactive checkListAnswer,
+    BuildContext context,
+    double height,
+    double width,
+    bool small,
+    List<QuestionAnswerReactive> listQuestionsSplitedByCategory,
+  ) {
+    final screenSize = MediaQuery.of(context).size;
 
-  buildCompleteCheckList(
-      CheckListAnswerReactive checkListAnswer,
-      double width,
-      bool small,
-      double height,
-      List<QuestionAnswerReactive> listQuestionsSplitedByCategory,
-      bool needPdf) {
-    var outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(
-        color: Colors.white,
-        width: 1.0,
-      ),
-    );
-    var enableBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(
-        color: PersonalizedColors.blueGrey,
-        width: 1.0,
-      ),
-    );
-
-    ScrollController scrollController = ScrollController();
-
-    List<String> causeList = Controller.to.buildCauseListList().length > 0
-        ? Controller.to.buildCauseListList()
-        : ['Não há causa cadastrada'];
-
-    causeList.sort();
-
-    RxString cause =
-        causeList.length > 0 ? causeList[0].obs : 'Não há causa cadastrada'.obs;
-    return Column(
-      children: [
-        needPdf
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                          alignment: Alignment.center,
-                          child: AutoSizeText(checkListAnswer.title!.value!,
-                              style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                color: Colors.white,
-                              )),
-                              maxLines: 2,
-                              maxFontSize: 14,
-                              textAlign: TextAlign.start))
-                      .marginOnly(left: width * 0.02),
-                  Container(
-                      width: small == true ? width * .1 : width * .1,
-                      height: height * .05,
-                      child: IconButton(
-                        tooltip: "Gerar PDF",
-                        onPressed: () {
-                          generatePdf(checkListAnswer, height, width,
-                              listQuestionsSplitedByCategory);
-                        },
-                        icon: Icon(Icons.picture_as_pdf, color: Colors.white),
-                      )).marginOnly(left: width * 0.02),
-                ],
-              ).marginOnly(top: height * 0.02)
-            : Container(
-                    child: AutoSizeText(checkListAnswer.title!.value!,
-                        style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                        maxLines: 2,
-                        maxFontSize: 14,
-                        textAlign: TextAlign.start))
-                .marginOnly(left: width * 0.02),
-        Container(
-            width: width * 0.8,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                          width: width * 0.25,
-                          child: AutoSizeText(
-                              "Lote: " + checkListAnswer.batch!.value!,
-                              style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                color: Colors.white,
-                              )),
-                              maxLines: 2,
-                              maxFontSize: 14,
-                              textAlign: TextAlign.start))
-                      .marginOnly(top: height * 0.02),
-                  Container(
-                      width: width * 0.25,
-                      child: AutoSizeText(
-                          "Nº de Série: " + checkListAnswer.serieNumber!.value!,
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            color: Colors.white,
-                          )),
-                          maxLines: 2,
-                          maxFontSize: 14,
-                          textAlign: TextAlign.start)),
-                  Container(
-                      width: width * 0.25,
-                      child: AutoSizeText(
-                          "Versão: " + checkListAnswer.productVersion!.value!,
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            color: Colors.white,
-                          )),
-                          maxLines: 2,
-                          maxFontSize: 14,
-                          textAlign: TextAlign.start)),
-                ])).marginOnly(top: height * 0.02),
-        Container(
-            width: width * 0.8,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                      width: width * 0.25,
-                      child: AutoSizeText(
-                          "Reponsável: " + checkListAnswer.nameOfUser!.value!,
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            color: Colors.white,
-                          )),
-                          maxLines: 2,
-                          maxFontSize: 14,
-                          textAlign: TextAlign.start)),
-                  Container(
-                      width: width * 0.2,
-                      child: AutoSizeText(
-                          "Data: " +
-                              CommonWidgets.getFormatter()
-                                  .format(checkListAnswer.date!),
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            color: Colors.white,
-                          )),
-                          maxLines: 2,
-                          maxFontSize: 14,
-                          textAlign: TextAlign.start)),
-                  Container(
-                      width: width * 0.35,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                  width: width * 0.25,
-                                  child: AutoSizeText(
-                                      "Setor: " +
-                                          checkListAnswer.sector!.value!,
-                                      style: GoogleFonts.montserrat(
-                                          textStyle: TextStyle(
-                                        color: Colors.white,
-                                      )),
-                                      maxLines: 2,
-                                      maxFontSize: 14,
-                                      textAlign: TextAlign.start)),
-                              checkListAnswer.origin!.value! != ""
-                                  ? Container(
-                                      width: width * 0.25,
-                                      child: AutoSizeText(
-                                          "Origem: " +
-                                              checkListAnswer.origin!.value!,
-                                          style: GoogleFonts.montserrat(
-                                              textStyle: TextStyle(
-                                            color: Colors.white,
-                                          )),
-                                          maxLines: 2,
-                                          maxFontSize: 14,
-                                          textAlign: TextAlign.start))
-                                  : Container(),
-                            ],
-                          )
-                        ],
-                      ))
-                ])).marginOnly(top: height * 0.02),
-        Container(
-          child: Expanded(
-            child: Scrollbar(
-              interactive: true,
-              showTrackOnHover: true,
-
-              controller: scrollController, // <---- Here, the controller
-              isAlwaysShown: true,
-              child: ListView(
-                  controller:
-                      scrollController, // <---- Same as the Scrollbar controller
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Checklist",
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (_, __, ___) => const SizedBox.shrink(),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved =
+            CurvedAnimation(parent: animation, curve: Curves.easeOut);
+        return SlideTransition(
+          position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+              .animate(curved),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                width: screenSize.width * 0.8,
+                height: screenSize.height * 0.6,
+                decoration: BoxDecoration(
+                  color: PersonalizedColors.skyBlue,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Column(
                   children: [
-                    Container(
-                        child: buildQuestions(height, width, small,
-                            listQuestionsSplitedByCategory, checkListAnswer)),
-                    Container(
-                            alignment: Alignment.centerLeft,
-                            width: width * 0.25,
-                            child: AutoSizeText(
-                                "Observação: " +
-                                    checkListAnswer.observation!.value!,
-                                style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                  color: Colors.white,
-                                )),
-                                maxLines: 3,
-                                maxFontSize: 14,
-                                textAlign: TextAlign.start))
-                        .marginOnly(top: height * 0.05),
-                    checkListAnswer.statusOfProduct != null
-                        ? Container(
-                                alignment: Alignment.centerLeft,
-                                width: width * 0.25,
-                                child: AutoSizeText(
-                                    "Motivo da Reprova: " +
-                                        checkListAnswer.statusOfProduct!,
-                                    style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                      color: Colors.white,
-                                    )),
-                                    maxLines: 3,
-                                    maxFontSize: 14,
-                                    textAlign: TextAlign.start))
-                            .marginOnly(bottom: height * 0.1)
-                        : Container(),
-                    Obx(() => Container(
-                          width: small == true ? width * .7 : width * .25,
-                          height: height * .07,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50))),
-                          child: DropdownButton(
-                            // Not necessary for Option 1
-                            onChanged: (newValue) {
-                              checkListAnswer.cause = newValue.toString();
-                              cause.value = newValue.toString();
-                            },
-                            selectedItemBuilder: (BuildContext context) {
-                              return causeList.map<Widget>((String item) {
-                                return Container(
-                                  alignment: Alignment.center,
-                                  child: CommonWidgets.buildText(
-                                      item, 14, Colors.white, TextAlign.center),
-                                );
-                              }).toList();
-                            },
-
-                            items: causeList.map((String option) {
-                              return DropdownMenuItem(
-                                child: CommonWidgets.buildText(
-                                    option, 14, Colors.white, TextAlign.center),
-                                value: option,
-                              );
-                            }).toList(),
-                            value: cause.value!,
-                            dropdownColor: PersonalizedColors.skyBlue,
-                            isExpanded: true,
-                            isDense: false,
-                            underline: SizedBox(),
-                          ).marginOnly(
-                            left: 10,
-                            right: 10,
-                          ),
-                        )).marginOnly(left: width * .2, right: width * .2),
-                    Container(
-                      width: small == true ? width * .15 : width * .25,
-                      height: height * .35,
-                      child: Container(
-                        child: TextFormField(
-                          autofocus: false,
-                          maxLines: 10,
-                          style: GoogleFonts.montserrat(
-                              textStyle:
-                                  TextStyle(color: Colors.white, fontSize: 14)),
-                          decoration: InputDecoration(
-                            hintText: "Solução",
-                            border: outlineInputBorder,
-                            enabledBorder: outlineInputBorder,
-                            focusedBorder: enableBorder,
-                            errorStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.red,
-                            )),
-                            hintStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            )),
-                          ),
-                          textAlign: TextAlign.center,
-                          onChanged: (value) =>
-                              checkListAnswer.causeDescription = value,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: buildCompleteCheckList(
+                          checkListAnswer,
+                          width,
+                          small,
+                          height,
+                          listQuestionsSplitedByCategory,
+                          true,
                         ),
                       ),
-                    ).marginOnly(
-                        left: width * .2,
-                        right: width * .2,
-                        bottom: height * 0.02,
-                        top: height * 0.02),
-                    Container(
-                            width: small == true ? width * .3 : width * .25,
-                            height: height * .05,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.white,
-                                    shape: new RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(60.0),
-                                    )),
-                                onPressed: () async {
-                                  String sector =
-                                      Controller.to.user.sector!.value;
-
-                                  checkListAnswer.cause = cause.value;
-                                  checkListAnswer.statusOfCheckList =
-                                      "Retrabalhado " +
-                                          Controller.to.user.sector!.value;
-
-                                  checkListAnswer.nameOfUserAssistance =
-                                      Controller.to.user.name!.value;
-
-                                  checkListAnswer.dateAssistance =
-                                      new DateTime.now();
-                                  Controller.to.editAnswer(checkListAnswer);
-                                  Controller.to.textController.clear();
-                                  (Get.context as Element).reassemble();
-                                },
-                                child: CommonWidgets.buildText(
-                                    "Salvar",
-                                    14,
-                                    PersonalizedColors.skyBlue,
-                                    TextAlign.center)))
-                        .marginOnly(left: width * .4, right: width * .4),
-                  ]).paddingOnly(
-                left: width * 0.05,
-                right: width * 0.05,
+                    ),
+                  ],
+                ),
               ),
             ),
-
-            // ...
           ),
+        );
+      },
+    );
+  }
+
+  Widget buildCompleteCheckList(
+    CheckListAnswerReactive checkListAnswer,
+    double width,
+    bool small,
+    double height,
+    List<QuestionAnswerReactive> listQuestionsSplitedByCategory,
+    bool needPdf,
+  ) {
+    // ───── Lista de causas e estado reativo ─────
+    List<String> causeList = Controller.to.buildCauseListList().isNotEmpty
+        ? Controller.to.buildCauseListList()
+        : ['Não há causa cadastrada'];
+    causeList.sort();
+    RxString cause = (checkListAnswer.cause ?? causeList.first).obs;
+
+    final scrollController = ScrollController();
+
+    Widget buildText(String text,
+        {Color color = Colors.white,
+        double? w,
+        TextAlign align = TextAlign.start}) {
+      return SizedBox(
+        width: w ?? width * 0.3,
+        child: AutoSizeText(
+          text,
+          style: GoogleFonts.exo2(textStyle: TextStyle(color: color)),
+          maxLines: 2,
+          maxFontSize: 14,
+          textAlign: align,
         ),
-      ],
+      );
+    }
+
+    Widget buildRowWrap(List<Widget> widgets) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+        margin: EdgeInsets.only(top: height * 0.02),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: widgets
+              .map((w) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: w,
+                    ),
+                  ))
+              .toList(),
+        ),
+      );
+    }
+
+    Widget buildPdfHeader() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            child: AutoSizeText(
+              checkListAnswer.title!.value!,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.exo2(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(width: 8),
+          IconButton(
+            tooltip: "Gerar PDF",
+            onPressed: () {
+              generatePdf(
+                checkListAnswer,
+                height,
+                width,
+                listQuestionsSplitedByCategory,
+              );
+            },
+            icon: Icon(Icons.picture_as_pdf, color: Colors.white),
+          ),
+        ],
+      ).marginOnly(top: height * 0.015);
+    }
+
+    return Container(
+      width: double.infinity,
+      height: height * 0.85,
+      decoration: BoxDecoration(
+        color: PersonalizedColors.skyBlue,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // Cabeçalho
+          needPdf
+              ? buildPdfHeader()
+              : buildText(
+                  checkListAnswer.title!.value!,
+                  align: TextAlign.center,
+                  w: width * 0.7,
+                ).marginOnly(top: height * 0.015),
+
+          // Dados principais
+          buildRowWrap([
+            buildText("Lote: ${checkListAnswer.batch!.value!}"),
+            buildText("Nº de Série: ${checkListAnswer.serieNumber!.value!}"),
+            buildText("Versão: ${checkListAnswer.productVersion!.value!}"),
+          ]),
+          buildRowWrap([
+            buildText("Responsável: ${checkListAnswer.nameOfUser!.value!}"),
+            buildText(
+                "Data: ${CommonWidgets.getFormatter().format(checkListAnswer.date!)}"),
+            buildText("Setor: ${checkListAnswer.sector!.value!}"),
+          ]),
+          buildRowWrap([
+            if (checkListAnswer.sector == Constants.controleDeQualidade &&
+                checkListAnswer.origin!.value!.isNotEmpty)
+              buildText("Origem: ${checkListAnswer.origin!.value!}"),
+            if (checkListAnswer.sector == Constants.controleDeQualidade &&
+                checkListAnswer.testEnvironment!.value!.isNotEmpty)
+              buildText(
+                  "Ambiente de Teste: ${checkListAnswer.testEnvironment!.value!}"),
+          ]),
+
+          // Área rolável com perguntas e retrabalho
+          SizedBox(
+            height: height * 0.5,
+            child: Scrollbar(
+              controller: scrollController,
+              interactive: true,
+              trackVisibility: true,
+              child: ListView(
+                controller: scrollController,
+                padding: EdgeInsets.symmetric(vertical: 0),
+                children: [
+                  // Perguntas
+                  buildQuestions(
+                    height,
+                    width,
+                    small,
+                    listQuestionsSplitedByCategory,
+                    checkListAnswer,
+                  ),
+
+                  // Observações/Causas/Motivos (se existirem)
+                  if ((checkListAnswer.observation?.value ?? '').isNotEmpty)
+                    buildText(
+                      "Observação: ${checkListAnswer.observation!.value!}",
+                      w: width * 0.7,
+                    ).marginOnly(bottom: height * 0.1),
+
+                  if ((checkListAnswer.cause ?? '').isNotEmpty)
+                    buildText(
+                      "Resumo da Causa: ${checkListAnswer.cause!}",
+                      w: width * 0.7,
+                    ).marginOnly(bottom: height * 0.1),
+
+                  if ((checkListAnswer.statusOfProduct ?? '').isNotEmpty)
+                    buildText(
+                      "Motivo da Reprova: ${checkListAnswer.statusOfProduct!}",
+                      w: width * 0.7,
+                    ).marginOnly(bottom: height * 0.1),
+
+                  // ───── Campos de retrabalho ─────
+                  SizedBox(height: height * 0.02),
+
+                  // 1) Dropdown de causas
+                  Center(
+                    child: Container(
+                        width: width * 0.5,
+                        child: Obx(() => DropdownButtonFormField<String>(
+                              value: cause.value,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor:
+                                    PersonalizedColors.blueGrey.withOpacity(.2),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ),
+                              items: causeList
+                                  .map((c) => DropdownMenuItem<String>(
+                                        value: c,
+                                        child: CommonWidgets.buildText(c, 14,
+                                            Colors.white, TextAlign.center),
+                                      ))
+                                  .toList(),
+                              dropdownColor: PersonalizedColors.skyBlue,
+                              onChanged: (v) {
+                                cause.value = v!;
+                                checkListAnswer.cause = v;
+                              },
+                            ))),
+                  ),
+
+                  SizedBox(height: height * 0.02),
+
+                  // 2) Campo de solução
+                  Center(
+                    child: Container(
+                      width: width * 0.5,
+                      child: TextFormField(
+                        initialValue: checkListAnswer.causeDescription ?? '',
+                        maxLines: 4,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Descreva a solução',
+                          hintStyle: TextStyle(color: Colors.white70),
+                          filled: true,
+                          fillColor:
+                              PersonalizedColors.blueGrey.withOpacity(.2),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        onChanged: (v) => checkListAnswer.causeDescription = v,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: height * 0.02),
+
+                  // 3) Botão Salvar
+                  Center(
+                    child: Container(
+                      width: width * 0.25,
+                      height: height * 0.06,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: StadiumBorder(),
+                        ),
+                        onPressed: () async {
+                          checkListAnswer.nameOfUserAssistance =
+                              Controller.to.user.name!.value;
+                          checkListAnswer.dateAssistance = DateTime.now();
+                          checkListAnswer.statusOfCheckList = "Retrabalhado " +
+                              Controller.to.user.sector!.value;
+                          await Controller.to.editAnswer(checkListAnswer);
+                          (Get.context as Element).reassemble();
+                        },
+                        child: CommonWidgets.buildText(
+                          'Salvar',
+                          14,
+                          PersonalizedColors.skyBlue,
+                          TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // ───────────────────────────────────────
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1010,13 +975,13 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
                   borderRadius: BorderRadius.circular(90)),
               preferBelow: false,
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              textStyle: GoogleFonts.montserrat(
+              textStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
               )),
               child: AutoSizeText(question.description!.value!,
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.exo2(
                       textStyle: TextStyle(
                     color: Colors.white,
                   )),
@@ -1029,7 +994,7 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
           child: Container(
         width: width * 0.01,
         child: AutoSizeText(status,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(
               color: colorStatus,
             )),
@@ -1053,7 +1018,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
                   child: Container(
                       child: AutoSizeText(
                 question.category!.value!,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.exo2(
                     textStyle: TextStyle(
                   color: Colors.white,
                 )),
@@ -1076,7 +1041,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
               child: Container(
                   child: AutoSizeText(
             question.category!.value!,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(
               color: Colors.white,
             )),

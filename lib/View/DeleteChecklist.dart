@@ -298,7 +298,7 @@ class DeleteChecklist extends StatelessWidget {
                               height: height * .1,
                               child: TextFormField(
                                 autofocus: false,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                         color: Colors.white, fontSize: 14)),
                                 decoration: InputDecoration(
@@ -306,7 +306,7 @@ class DeleteChecklist extends StatelessWidget {
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelText: optionValue.value,
-                                  labelStyle: GoogleFonts.montserrat(
+                                  labelStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -314,12 +314,12 @@ class DeleteChecklist extends StatelessWidget {
                                   border: outlineInputBorder,
                                   enabledBorder: outlineInputBorder,
                                   focusedBorder: enableBorder,
-                                  errorStyle: GoogleFonts.montserrat(
+                                  errorStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
                                   )),
-                                  hintStyle: GoogleFonts.montserrat(
+                                  hintStyle: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -346,7 +346,7 @@ class DeleteChecklist extends StatelessWidget {
                                             width: 1.0,
                                           ),
                                         ),
-                                        hintStyle: GoogleFonts.montserrat(
+                                        hintStyle: GoogleFonts.exo2(
                                             textStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.white,
@@ -362,7 +362,7 @@ class DeleteChecklist extends StatelessWidget {
                                       firstDate: DateTime(2021),
                                       cursorRadius: Radius.circular(90),
                                       lastDate: DateTime(2100),
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
@@ -390,7 +390,7 @@ class DeleteChecklist extends StatelessWidget {
                                             width: 1.0,
                                           ),
                                         ),
-                                        hintStyle: GoogleFonts.montserrat(
+                                        hintStyle: GoogleFonts.exo2(
                                             textStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.white,
@@ -406,7 +406,7 @@ class DeleteChecklist extends StatelessWidget {
                                       firstDate: DateTime(2000),
                                       cursorRadius: Radius.circular(90),
                                       lastDate: DateTime(2100),
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
@@ -535,7 +535,7 @@ class DeleteChecklist extends StatelessWidget {
           Expanded(
               child: Scrollbar(
                   interactive: true,
-                  showTrackOnHover: true,
+                  trackVisibility: true,
                   controller: scrollController, // <---- Here, the controller
                   thumbVisibility: true,
                   child: ListView(
@@ -713,7 +713,7 @@ class DeleteChecklist extends StatelessWidget {
           children: [
             Container(
                 child: AutoSizeText(checkListAnswer.title!.value,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),
@@ -744,7 +744,7 @@ class DeleteChecklist extends StatelessWidget {
                           width: width * 0.25,
                           child: AutoSizeText(
                               "Lote: " + checkListAnswer.batch!.value,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -756,7 +756,7 @@ class DeleteChecklist extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Nº de Série: " + checkListAnswer.serieNumber!.value,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -767,7 +767,7 @@ class DeleteChecklist extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Versão: " + checkListAnswer.productVersion!.value,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -784,7 +784,7 @@ class DeleteChecklist extends StatelessWidget {
                       width: width * 0.25,
                       child: AutoSizeText(
                           "Reponsável: " + checkListAnswer.nameOfUser!.value,
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -795,7 +795,7 @@ class DeleteChecklist extends StatelessWidget {
                       width: width * 0.2,
                       child: AutoSizeText(
                           "Data: " + formatter.format(checkListAnswer.date!),
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.exo2(
                               textStyle: TextStyle(
                             color: Colors.white,
                           )),
@@ -811,7 +811,7 @@ class DeleteChecklist extends StatelessWidget {
                               Container(
                                   child: AutoSizeText(
                                       "Setor: " + checkListAnswer.sector!.value,
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         color: Colors.white,
                                       )),
@@ -833,7 +833,7 @@ class DeleteChecklist extends StatelessWidget {
                         width: width * 0.25,
                         child: AutoSizeText(
                             "Origem: " + checkListAnswer.origin!.value,
-                            style: GoogleFonts.montserrat(
+                            style: GoogleFonts.exo2(
                                 textStyle: TextStyle(
                               color: Colors.white,
                             )),
@@ -847,7 +847,7 @@ class DeleteChecklist extends StatelessWidget {
                         child: AutoSizeText(
                             "Ambiente de Teste: " +
                                 checkListAnswer.testEnvironment!.value,
-                            style: GoogleFonts.montserrat(
+                            style: GoogleFonts.exo2(
                                 textStyle: TextStyle(
                               color: Colors.white,
                             )),
@@ -872,7 +872,7 @@ class DeleteChecklist extends StatelessWidget {
                           child: AutoSizeText(
                               "Responsável Retrabalho: " +
                                   checkListAnswer.nameOfUserAssistance!,
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -885,7 +885,7 @@ class DeleteChecklist extends StatelessWidget {
                               "Data Retrabalho: " +
                                   formatter
                                       .format(checkListAnswer.dateAssistance!),
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.exo2(
                                   textStyle: TextStyle(
                                 color: Colors.white,
                               )),
@@ -909,7 +909,7 @@ class DeleteChecklist extends StatelessWidget {
                         Container(
                             width: width * 0.25,
                             child: AutoSizeText("Produto Retrabalhado: ",
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: PersonalizedColors.warningColor,
                                 )),
@@ -920,7 +920,7 @@ class DeleteChecklist extends StatelessWidget {
                             width: width * 0.25,
                             child:
                                 AutoSizeText("Causa: " + checkListAnswer.cause!,
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.exo2(
                                         textStyle: TextStyle(
                                       color: Colors.white,
                                     )),
@@ -944,7 +944,7 @@ class DeleteChecklist extends StatelessWidget {
                                   child: AutoSizeText(
                                       "Solução: " +
                                           checkListAnswer.causeDescription!,
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.exo2(
                                           textStyle: TextStyle(
                                         color: Colors.white,
                                       )),
@@ -968,7 +968,7 @@ class DeleteChecklist extends StatelessWidget {
                           Container(
                               width: width * 0.25,
                               child: AutoSizeText("Produto Aprovado",
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.exo2(
                                       textStyle: TextStyle(
                                     color: PersonalizedColors.lightGreen,
                                   )),
@@ -980,7 +980,7 @@ class DeleteChecklist extends StatelessWidget {
                     Container(
                         width: width * 0.25,
                         child: AutoSizeText("Produto Reprovado",
-                            style: GoogleFonts.montserrat(
+                            style: GoogleFonts.exo2(
                                 textStyle: TextStyle(
                               color: PersonalizedColors.errorColor,
                             )),
@@ -992,7 +992,7 @@ class DeleteChecklist extends StatelessWidget {
           child: Expanded(
             child: Scrollbar(
               interactive: true,
-              showTrackOnHover: true,
+              trackVisibility: true,
 
               controller: scrollController, // <---- Here, the controller
               thumbVisibility: true,
@@ -1010,7 +1010,7 @@ class DeleteChecklist extends StatelessWidget {
                             child: AutoSizeText(
                                 "Observação: " +
                                     checkListAnswer.observation!.value,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -1025,7 +1025,7 @@ class DeleteChecklist extends StatelessWidget {
                             child: AutoSizeText(
                                 "Motivo da Reprova: " +
                                     checkListAnswer.statusOfProduct!,
-                                style: GoogleFonts.montserrat(
+                                style: GoogleFonts.exo2(
                                     textStyle: TextStyle(
                                   color: Colors.white,
                                 )),
@@ -1234,13 +1234,13 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
                   borderRadius: BorderRadius.circular(90)),
               preferBelow: false,
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              textStyle: GoogleFonts.montserrat(
+              textStyle: GoogleFonts.exo2(
                   textStyle: TextStyle(
                 fontSize: 14,
                 color: Colors.white,
               )),
               child: AutoSizeText(question.description!.value,
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.exo2(
                       textStyle: TextStyle(
                     color: Colors.white,
                   )),
@@ -1253,7 +1253,7 @@ void buildQuestionWidget(List<TableRow> rows, QuestionAnswerReactive question,
           child: Container(
         width: width * 0.1,
         child: AutoSizeText(status,
-            style: GoogleFonts.montserrat(
+            style: GoogleFonts.exo2(
                 textStyle: TextStyle(
               color: colorStatus,
             )),
@@ -1306,19 +1306,19 @@ showConfirmation(small, width, height, CheckListAnswerReactive answer) {
                 height: height * .1,
                 child: TextFormField(
                   autofocus: false,
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.exo2(
                       textStyle: TextStyle(color: Colors.white, fontSize: 14)),
                   decoration: InputDecoration(
                     hintText: "Senha",
                     border: outlineInputBorder,
                     enabledBorder: outlineInputBorder,
                     focusedBorder: enableBorder,
-                    errorStyle: GoogleFonts.montserrat(
+                    errorStyle: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       fontSize: 14,
                       color: Colors.red,
                     )),
-                    hintStyle: GoogleFonts.montserrat(
+                    hintStyle: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -1379,7 +1379,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
                       width: width * 0.1,
                       child: AutoSizeText(
                         question.category!.value,
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.exo2(
                             textStyle: TextStyle(
                           color: Colors.white,
                         )),
@@ -1403,7 +1403,7 @@ void buildCategoryWidget(String category, QuestionAnswerReactive question,
                   width: width * 0.1,
                   child: AutoSizeText(
                     question.category!.value,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.exo2(
                         textStyle: TextStyle(
                       color: Colors.white,
                     )),

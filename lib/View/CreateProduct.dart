@@ -94,7 +94,7 @@ class CreateProduct extends StatelessWidget {
         height: height * .06,
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: PersonalizedColors.lightGreen,
+                backgroundColor: PersonalizedColors.lightGreen,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                 )),

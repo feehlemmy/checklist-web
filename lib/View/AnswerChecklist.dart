@@ -41,7 +41,9 @@ class AnswerChecklist extends StatelessWidget {
     return firstTime == false
         ? Scaffold(
             backgroundColor: PersonalizedColors.skyBlue,
-            appBar: new AppBar(),
+            appBar: new AppBar(
+              backgroundColor: PersonalizedColors.skyBlue,
+            ),
             drawer: AppDrawer(
               items: items,
               title: 'Painel ',
@@ -78,6 +80,7 @@ class AnswerChecklist extends StatelessWidget {
         Translator.checkListSkeletonReactiveToCheckListAnswerReactive(
             checkListSkeletonReactive);
     ScrollController scrollController = ScrollController();
+    Controller.to.getAllCause();
 
     List<String> optionsQualityControll = [
       'Atualização da Engenharia',
@@ -430,10 +433,9 @@ class AnswerChecklist extends StatelessWidget {
         Expanded(
           child: Scrollbar(
             interactive: true,
-            showTrackOnHover: true,
+            trackVisibility: true,
 
             controller: scrollController, // <---- Here, the controller
-            isAlwaysShown: true,
             child: ListView(
                 controller:
                     scrollController, // <---- Same as the Scrollbar controller
@@ -494,7 +496,8 @@ class AnswerChecklist extends StatelessWidget {
                           height: height * .07,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: PersonalizedColors.lightGreen,
+                                  backgroundColor:
+                                      PersonalizedColors.lightGreen,
                                   shape: new RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(60.0),
@@ -596,8 +599,9 @@ class AnswerChecklist extends StatelessWidget {
                                             children: [
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    primary: PersonalizedColors
-                                                        .lightGreen,
+                                                    backgroundColor:
+                                                        PersonalizedColors
+                                                            .lightGreen,
                                                     shape:
                                                         new RoundedRectangleBorder(
                                                       borderRadius:
@@ -618,8 +622,9 @@ class AnswerChecklist extends StatelessWidget {
                                               ),
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    primary: PersonalizedColors
-                                                        .redAccent,
+                                                    backgroundColor:
+                                                        PersonalizedColors
+                                                            .redAccent,
                                                     shape:
                                                         new RoundedRectangleBorder(
                                                       borderRadius:
@@ -852,7 +857,14 @@ class AnswerChecklist extends StatelessWidget {
         width: 1.0,
       ),
     );
+    List<String> causeList = Controller.to.buildCauseListList().length > 0
+        ? Controller.to.buildCauseListList()
+        : ['Não há causa cadastrada'];
 
+    causeList.sort();
+
+    RxString cause =
+        causeList.length > 0 ? causeList[0].obs : 'Não há causa cadastrada'.obs;
     showFlexibleBottomSheet(
         minHeight: 0,
         initHeight: 0.8,
@@ -919,6 +931,49 @@ class AnswerChecklist extends StatelessWidget {
                           checkListAnswer.statusOfProduct = value,
                     ),
                   ),
+                  Obx(() => Container(
+                        width: small == true ? width * .7 : width * .25,
+                        height: height * .07,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.white,
+                                style: BorderStyle.solid,
+                                width: 1),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50))),
+                        child: DropdownButton(
+                          // Not necessary for Option 1
+                          onChanged: (newValue) {
+                            checkListAnswer.cause = newValue.toString();
+                            cause.value = newValue.toString();
+                          },
+                          selectedItemBuilder: (BuildContext context) {
+                            return causeList.map<Widget>((String item) {
+                              return Container(
+                                alignment: Alignment.center,
+                                child: CommonWidgets.buildText(
+                                    item, 14, Colors.white, TextAlign.center),
+                              );
+                            }).toList();
+                          },
+
+                          items: causeList.map((String option) {
+                            return DropdownMenuItem(
+                              child: CommonWidgets.buildText(
+                                  option, 14, Colors.white, TextAlign.center),
+                              value: option,
+                            );
+                          }).toList(),
+                          value: cause.value!,
+                          dropdownColor: PersonalizedColors.skyBlue,
+                          isExpanded: true,
+                          isDense: false,
+                          underline: SizedBox(),
+                        ).marginOnly(
+                          left: 10,
+                          right: 10,
+                        ),
+                      )).marginOnly(left: width * .2, right: width * .2),
                   Container(
                     height: height * .02,
                   ),
@@ -983,7 +1038,7 @@ class AnswerChecklist extends StatelessWidget {
                       height: height * .05,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: PersonalizedColors.lightGreen,
+                              backgroundColor: PersonalizedColors.lightGreen,
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(60.0),
                               )),

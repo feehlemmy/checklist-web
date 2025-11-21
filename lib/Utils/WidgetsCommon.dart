@@ -19,7 +19,7 @@ class CommonWidgets {
       String text, double size, Color color, TextAlign align) {
     return AutoSizeText(
       text,
-      style: GoogleFonts.montserrat(
+      style: GoogleFonts.exo2(
         textStyle: TextStyle(
           fontSize: size,
           color: color,
@@ -53,14 +53,14 @@ class CommonWidgets {
       child: TextFormField(
         autofocus: false,
         cursorColor: Colors.white,
-        style: GoogleFonts.montserrat(
+        style: GoogleFonts.exo2(
             textStyle: TextStyle(color: color, fontSize: fontSize)),
         decoration: InputDecoration(
           prefixIcon: icon,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           hintText: hint,
           labelText: hint,
-          labelStyle: GoogleFonts.montserrat(
+          labelStyle: GoogleFonts.exo2(
               textStyle: TextStyle(
             fontSize: fontSize,
             color: Colors.white,
@@ -68,12 +68,12 @@ class CommonWidgets {
           border: outlineInputBorder,
           enabledBorder: outlineInputBorder,
           focusedBorder: enableBorder,
-          errorStyle: GoogleFonts.montserrat(
+          errorStyle: GoogleFonts.exo2(
               textStyle: TextStyle(
             fontSize: 14,
             color: Colors.red,
           )),
-          hintStyle: GoogleFonts.montserrat(
+          hintStyle: GoogleFonts.exo2(
               textStyle: TextStyle(
             fontSize: 14,
             color: color,
@@ -99,7 +99,7 @@ class CommonWidgets {
             child: pw.Text(checkListAnswer.title!.value!,
                 style: pw.TextStyle(
                   color: PdfColors.black,
-                  fontSize: 10,
+                  fontSize: 14,
                 ))),
         pw.Container(height: height * 0.02),
         pw.Container(
@@ -112,7 +112,7 @@ class CommonWidgets {
                       child: pw.Text("Lote: " + checkListAnswer.batch!.value!,
                           style: pw.TextStyle(
                             color: PdfColors.black,
-                            fontSize: 10,
+                            fontSize: 14,
                           ))),
                   pw.Container(
                     width: width * 0.26,
@@ -120,7 +120,7 @@ class CommonWidgets {
                         "Nº de Série: " + checkListAnswer.serieNumber!.value!,
                         style: pw.TextStyle(
                           color: PdfColors.black,
-                          fontSize: 10,
+                          fontSize: 14,
                         )),
                   ),
                   pw.Container(
@@ -129,7 +129,7 @@ class CommonWidgets {
                         "Versão: " + checkListAnswer.productVersion!.value!,
                         style: pw.TextStyle(
                           color: PdfColors.black,
-                          fontSize: 10,
+                          fontSize: 14,
                         )),
                   ),
                 ])),
@@ -145,7 +145,7 @@ class CommonWidgets {
                         "Reponsável: " + checkListAnswer.nameOfUser!.value!,
                         style: pw.TextStyle(
                           color: PdfColors.black,
-                          fontSize: 10,
+                          fontSize: 14,
                         )),
                   ),
                   pw.Container(
@@ -154,7 +154,7 @@ class CommonWidgets {
                         "Data: " + formatter.format(checkListAnswer.date!),
                         style: pw.TextStyle(
                           color: PdfColors.black,
-                          fontSize: 10,
+                          fontSize: 14,
                         )),
                   ),
                 ])),
@@ -170,7 +170,7 @@ class CommonWidgets {
                     child: pw.Text("Setor: " + checkListAnswer.sector!.value!,
                         style: pw.TextStyle(
                           color: PdfColors.black,
-                          fontSize: 10,
+                          fontSize: 14,
                         )),
                   ),
                   checkListAnswer.origin != null &&
@@ -181,7 +181,7 @@ class CommonWidgets {
                               "Origem: " + checkListAnswer.origin!.value!,
                               style: pw.TextStyle(
                                 color: PdfColors.black,
-                                fontSize: 10,
+                                fontSize: 14,
                               )),
                         )
                       : pw.Container(
@@ -196,7 +196,7 @@ class CommonWidgets {
                                   checkListAnswer.testEnvironment!.value!,
                               style: pw.TextStyle(
                                 color: PdfColors.black,
-                                fontSize: 10,
+                                fontSize: 14,
                               )),
                         )
                       : pw.Container(
@@ -220,7 +220,7 @@ class CommonWidgets {
                                 checkListAnswer.nameOfUserAssistance!,
                             style: pw.TextStyle(
                               color: PdfColors.black,
-                              fontSize: 10,
+                              fontSize: 14,
                             )),
                       ),
                       pw.Container(
@@ -231,7 +231,7 @@ class CommonWidgets {
                                     .format(checkListAnswer.dateAssistance!),
                             style: pw.TextStyle(
                               color: PdfColors.black,
-                              fontSize: 10,
+                              fontSize: 14,
                             )),
                       ),
                       pw.Container(
@@ -260,7 +260,7 @@ class CommonWidgets {
                           child: pw.Text("Causa: " + checkListAnswer.cause!,
                               style: pw.TextStyle(
                                 color: PdfColors.black,
-                                fontSize: 10,
+                                fontSize: 14,
                               ))),
                       checkListAnswer.causeDescription != null
                           ? pw.Container(
@@ -270,7 +270,7 @@ class CommonWidgets {
                                       checkListAnswer.causeDescription!,
                                   style: pw.TextStyle(
                                     color: PdfColors.black,
-                                    fontSize: 10,
+                                    fontSize: 14,
                                   )),
                             )
                           : pw.Container()
@@ -320,7 +320,7 @@ class CommonWidgets {
                           "Observação: " + checkListAnswer.observation!.value!,
                           style: pw.TextStyle(
                             color: PdfColors.black,
-                            fontSize: 10,
+                            fontSize: 14,
                           )),
                     )
                   : pw.Container(),
@@ -332,7 +332,7 @@ class CommonWidgets {
                               checkListAnswer.statusOfProduct!,
                           style: pw.TextStyle(
                             color: PdfColors.black,
-                            fontSize: 10,
+                            fontSize: 14,
                           )),
                     )
                   : pw.Container()
@@ -415,7 +415,7 @@ class CommonWidgets {
           child: pw.Text(
             question.description!.value!,
             style: pw.TextStyle(
-              fontSize: 10,
+              fontSize: 14,
               color: PdfColors.black,
             ),
           ),
@@ -425,7 +425,7 @@ class CommonWidgets {
           child: pw.Text(status,
               style: pw.TextStyle(
                 color: colorStatus,
-                fontSize: 10,
+                fontSize: 14,
               )),
         ),
         pw.Container(height: height * 0.02),
@@ -457,7 +457,7 @@ class CommonWidgets {
                 child: pw.Text(
               question.category!.value!,
               style: pw.TextStyle(
-                fontSize: 10,
+                fontSize: 14,
               ),
             )),
             pw.Container(),
